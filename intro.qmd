@@ -1,9 +1,33 @@
+---
+bibliography: references.bib
+---
+
 # Introduction
 
-This is a book created from markdown and executable code.
+Basic examples of Shiny Apps usage always show a single server / ui implementation with most probably a few inputs on the ui side driving selection or transformation that are performed on the server side to build a plot that is rendered on the ui side.
 
-See @knuth84 for additional discussion of literate programming.
+In this basic scenario, inputs are given an id (through the `InputId` attribute) on the ui function side and the server function will listen to them through reactive expressions or event handlers. The server will also generate reactive `output` variables that are rendered as HTML on the ui side thanks to the \*output functions.
 
-```{r}
-1 + 1
-```
+In this configuration, the uniqueness of the input ids is sufficient to ensure good communication between the ui and the server sides.[^intro-1]
+
+[^intro-1]: Also an output can be rendered only once on the ui side and cannot be used in different places.
+
+But as soon as your app is getting more complex, by adding more features and depth to the logic behind, the need for a more complex yet flexible and readable architecture becomes more and more critical.\
+This is basically what scaling up means. It is about how to handle the complexity in a smart and efficient manner, while keeping the code maintainable.
+
+In most cases, this is achieved by modulaziring the apps in multiple components, each of them being responsible for handling specific tasks, features or basically anything that can be *encapsulated* into it.
+
+Shiny has the modules to implement this approach in more complex apps which is well documented on the Shiny website [@positShinyModularizing]
+
+One important aspect of the Shiny modules is that their functions have to be called for them to start, which introduces a notion of parent-child relationship that will require some communication between them, as well as to and from the ui side.
+
+In most cases, this relationship will be between the main server and the module server but it's not rare that a module will itself call another module to delegate part of its tasks (this is the nested module implementation).
+
+This very often ends up in a global app architecture that involves a main server, child / siblings modules as well as nested modules. All of them need to interact with each others to drive the ui but also listen to its events to trigger actions resulting in very complex communication challenges.
+
+The challenges are even more complex as modules are running in their own context where they only see their own inputs & outputs[^intro-2] - this is called namespace and the logic behind is explained here: [@masteringshinyChapterShiny]
+
+[^intro-2]: This can be extended to objects in general since they are encapsulated inside functions!
+
+This book will guide you through the journey to mastering the communication between Shiny modules. It starts with the communication inside a single module to setup the basis, continues with the communication from a module to its parent as well as from its parent before diving into more complex implementations like communication between modules and nested modules.\
+It will also extend to building complex communication instructions as I believed it's one of the key approaches to reduce the multiplication of communication components within a complex app.
