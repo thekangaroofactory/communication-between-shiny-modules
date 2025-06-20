@@ -1,0 +1,33 @@
+project:
+  type: book
+
+book:
+  title: "Mastering Communication Between Shiny Modules"
+  author: "Philippe Peret"
+  date: "19/06/2025"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+  page-footer:
+    border: false
+    left: "Copyright 2025, Philippe Peret" 
+    right: 
+      - icon: github
+        href: https://github.com/thekangaroofactory
+      - icon: linkedin 
+        href: https://www.linkedin.com/in/philippeperet/
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
