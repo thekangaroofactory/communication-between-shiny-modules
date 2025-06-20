@@ -4,7 +4,7 @@ project:
 book:
   title: "Mastering Communication Between Shiny Modules"
   author: "Philippe Peret"
-  date: "19/06/2025"
+  date: today
   chapters:
     - index.qmd
     - intro.qmd
