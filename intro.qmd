@@ -2,7 +2,7 @@
 bibliography: references.bib
 ---
 
-# Introduction
+# Introduction {.unnumbered}
 
 Basic examples of Shiny Apps usage always show a single server / ui implementation with most probably a few inputs on the ui side driving selection or transformation that are performed on the server side to build a plot that is rendered on the ui side.
 
