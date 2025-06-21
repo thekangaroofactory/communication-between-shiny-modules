@@ -86,8 +86,6 @@ So the "numeric" input that we defined in the module ui function will become "mo
 <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
 ```
 
-{{< <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0"> >}}
-
 This explains why the main server sees a "module-numeric" entry in its own input list.
 
 Remember that input names need to be unique, so using namespace lifts this restriction at the module level (in particular if you call same module several times within the same app with different ids).
