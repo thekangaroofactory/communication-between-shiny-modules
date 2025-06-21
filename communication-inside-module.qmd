@@ -80,8 +80,6 @@ You can see the function reference for more details [NS](https://shiny.posit.co/
 
 So the "numeric" input that we defined in the module ui function will become "module-numeric" to the main ui that implements it. You can actually confirm this by inspecting the HTML page in your web browser.
 
-> <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
-
 ``` html
 <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
 ```
@@ -133,9 +131,9 @@ textOutput(NS(id, "text"))
 
 Again it's a good exercise to inspect the HTML output from the browser:
 
-> ```{=html}
-> <div id="module-text" ... ></div>
-> ```
+``` html
+<div id="module-text" ... >This is a sample</div>
+```
 
 As you can see, the id of the output element fits with the one wrapped into the namespace scope as expected.
 
