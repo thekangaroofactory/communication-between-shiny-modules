@@ -115,9 +115,9 @@ But it is seen by **both** the module and the main servers with its encapsulated
 
 [^communication-inside-module-3]: Displaying the outputs to the console has been done thanks to this answer [@getShinyOutputs]
 
-> Listening on http://127.0.0.1:5265
-> Outputs seen from the module server:  module-text  
-> Outputs seen from the main server:  module-text 
+> Listening on http://127.0.0.1:5265\
+> Outputs seen from the module server:  module-text\
+> Outputs seen from the main server:  module-text
 
 That's one big difference here. No matter where you would like to access this output, it will require to use the namespace function:
 
