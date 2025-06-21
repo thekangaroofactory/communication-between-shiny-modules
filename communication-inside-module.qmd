@@ -1,4 +1,4 @@
-# Communication inside a module
+# Communication inside module
 
 Although this is the easy part of the topic as the communication inside a module is not different from the communication inside a standard server / ui Shiny app, it's important to understand how it actually works to extend it to more complex cases in a second step.
 
