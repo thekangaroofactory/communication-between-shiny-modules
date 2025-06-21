@@ -1,0 +1,144 @@
+# Communication inside a module
+
+Although this is the easy part of the topic as the communication inside a module is not different from the communication inside a standard server / ui Shiny app, it's important to understand how it actually works to extend it to more complex cases in a second step.
+
+Not different... well actually it is not different in the code that you will write to manage inputs / outputs but there is a major difference with the namespace concept and it's important to understand the details of it to be able to handle more complex communications and architectures.
+
+## Calling the module server function
+
+Whenever a module server is launched using the `moduleServer` function, input and output arguments are automatically handled and somehow *reduced* (in the sens of limited) to the scope of the module that is represented by its namespace itself designated by its `id`.
+
+```{r}
+#| eval: false
+
+moduleServer(id, function(input, output, session) {
+  
+})
+```
+
+If you have a look at the `moduleServer` function[^summary-1] you will see that the second argument called `module` is later passed to the `callModule` function that itself defines a `childScope` object used to call the module function.[^summary-2]\
+The `childScope` object is build based on the `id` that is pass to the `moduleServer`, so the function defining the module server logic is basically called with its input / output arguments limited to the scope defined by the `id`.
+
+[^summary-1]: You can do this with a CTRL + left click on the function's name in your code.
+
+[^summary-2]: Indeed as module = function(), passing module just pass the reference to the function while module() actually calls the function.
+
+This is the reason why a module server can't see outside of it's own objects.
+
+## Module inputs
+
+As any other R object, the `input` object received by the module function can be explored.\
+For example, using `str(input)` inside the module server function will show that the object is a list that implements the 'ReactiveValues' class and has several methods including `names`.
+
+This means that, as long as you run it within a reactive context, you can access the names of the module input to figure out what the module actually receives.
+
+The [module-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-input) folder of the GitHub repository linked to this book implements a very simple example of a module that contains a single input.
+
+The input is defined in the module ui function:
+
+```{r}
+#| eval: false
+
+  # -- namespace
+  ns <- NS(id)
+
+  # -- input
+  numericInput(inputId = ns("numeric"),
+               label = "Module server input",
+               value = 0)
+  
+```
+
+Then both the main app server and the module server implement an event listener on their respective `input` parameters.\
+Here is the code for the main server:
+
+```{r}
+#| eval: false
+
+observeEvent(input,
+             cat("Input(s) seen by the main server:", paste(names(input), collapse = " / "), "\n"))
+
+```
+
+Same code is used in the module server function (except the prefix string passed to cat).
+
+Running the app will output this to the console:
+
+> runApp('module-input')
+>
+> Listening on <http://127.0.0.1:5265>\
+> Input(s) seen by the module server: numeric\
+> Input(s) seen by the main server: module-numeric
+
+Let's dive into the sequence of events.\
+When the numeric input object is created, it's `id` is valuated using a `ns` function defined as `NS(id)` that you will find in many documentations & articles. This `ns` is just a wrapper to avoid copying the id parameter of the module server function to each and every inputs defined in it.\
+It is literaly same as using `NS(id, "numeric")` in our case.
+
+Again, the `NS` function can be explored to discover that both module id and input id will be merged into a single character string using the `paste` function with its `sep` equals to `ns.sep`.\
+Typing `ns.sep` to the console will output "-".\
+You can see the function reference for more details [NS](https://shiny.posit.co/r/reference/shiny/latest/ns.html) about it.
+
+So the "numeric" input that we defined in the module ui function will become "module-numeric" to the main ui that implements it. You can actually confirm this by inspecting the HTML page in your web browser.
+
+> <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
+
+This explains why the main server sees a "module-numeric" entry in its own input list.
+
+Remember that input names need to be unique, so using namespace lifts this restriction at the module level (in particular if you call same module several times within the same app with different ids).
+
+Back to the module, it sees a "numeric" entry in its own input list because of the scope that is applied on the input parameter of the module server function.\
+It behaves as if the input defined in the module is wrapped into the module context using its id to go at the app level, then unwrapped to get back to the module server function.
+
+From inside the module, this process is quite transparent since you can access the input value using `input$numeric` except you encapsulate the `inputId` using the `NS` function.
+
+I believe this is one of the main reasons why Shiny module communication feels super complicated while it's actually quite simple.
+
+The key here is to keep in mind that this wrapping / unwrapping process does take place in both ways but in different places and through different means. Wrapping is explicitely done at each input's level using the `NS` function while unwrapping is implicitly performed at the `moduleServer` function level.
+
+## Module outputs
+
+The way outputs are managed is pretty much the same except this explicit / implicit process mirrors the one for managing the inputs.
+
+The [module-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-output) folder of the GitHub repository linked to this book implements a very simple example of a module that contains a single output.
+
+The output defined in the module server function is named without using the namespace function:
+
+```{r}
+#| eval: false
+
+output$text <- renderText("This is a sample")
+```
+
+But it is seen by **both** the module and the main servers with its encapsulated (wrapped into its namespace) name[^summary-3]:
+
+[^summary-3]: Displaying the outputs to the console has been done thanks to this answer [@getShinyOutputs]
+
+> ```         
+> Listening on http://127.0.0.1:5265
+> Outputs seen from the module server:  module-text  
+> Outputs seen from the main server:  module-text 
+> ```
+
+That's one big difference here. No matter where you would like to access this output, it will require to use the namespace function:
+
+```{r}
+#| eval: false
+
+textOutput(NS(id, "text"))
+```
+
+Again it's a good exercise to inspect the HTML output from the browser:
+
+> ```{=html}
+> <div id="module-text" ... ></div>
+> ```
+
+As you can see, the id of the output element fits with the one wrapped into the namespace scope as expected.
+
+## Wrap up
+
+In this chapter, we have seen how calling the module server function implicitly scopes the input & output objects through the namespace.
+
+Inputs and outputs created inside the module server are wrapped into this namespace so that they can't collide with other inputs / outputs from other modules or from the main app server.
+
+The namespace process is either implicit or explicit through the use of the `NS` function - *which may creates a bit of confusion* - but you have to keep in mind that it applies in any case so that thinking module means thinking namespace & scope.
