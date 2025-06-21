@@ -1,0 +1,140 @@
+---
+bibliography: references.bib
+---
+
+# Communication from a module (to its parent)
+
+The previous chapter already introduced how a module communicates with its parent. Indeed, as long as a module can't live by itself (there's no way to launch it outside of a Shiny app), the communication inside a Shiny module already involves communicating to the main app, its ui and server, *before* (in the sense of an action timeline) coming back to the scope of the module.
+
+But the goal was not analyze how a module communicates with it's parent so this chapter will specificaly focus on this topic and extend to how to pass data / information to its parent.
+
+You may ask yourself why I use *parent* instead of *main server* to describe this relationship.\
+While the standard or at least most common way to implement a module is to call it's function from the main app server, it's not rare that a module will itself call another module (this is called nested module).\
+One example is when you have a module that will perform a task that involves another task wrapped into a different module or a sub-task that is not always necessary.
+
+As an example, the {kitems} module server has a nested module to manage all the admin tasks on the data model because it contains numerous inputs, outputs and reactives that are not necessary to run the item management and may be used only once to setup the data model. In this case, it will never be launched when a user starts the app as they are most likely not allowed to perform admin tasks.\
+With this approach, you can save some resources by not creating unnecessary entries in the global input & output objects.
+
+Back to the relationship between a module and its parent, it does not matter if it's called from the main app server or from another module server. In both cases, it's just a call to its server function within a specific context and the scope of the module will be a child of it's parent scope.
+
+We will dive later into the more complex cases where nested modules are involved to avoid bringing extra complexity at this stage, but generalizing to a parent-child relationship now will help when things get deeper complexity.\
+Also this chapter will still be a reference no matter who is the parent of the module.
+
+## Inputs
+
+Inputs are supposed to be values that are communicated (mostly by the main app ui) to the module through the namespace / scope mechanism.
+
+But as we saw in the previous chapter, they are visible from the main app server so in a sense there is a kind of communication from the module to its parent through the namespace wrapping.
+
+That being said, module inputs are not meant to be accessed outside of the module.\
+Note that as we saw, it is *technical* possible to access them from the main server, but as long as you want to architecture your app into modules that encapsulate given tasks or features you should not access or take dependency on them outside of the specific module which declared them. Otherwise you will create cross dependencies, destroy the readability of the architecture and most probably end up in a code that is not maintainable.
+
+In conclusion, module input should **not** be used to communicate to the parent but only to trigger actions inside the module.
+
+## Outputs
+
+Outputs are natural objects to communicate from inside a module to the outside in particular to its parent, but they are limited to a specific process of rendering reactive expressions to the output list and feed the app ui with reactive outputs to display text, tables, plots and... inputs.
+
+In short, outputs are communicating to the parent object of the module, but only for rendering purpose and they can't be used to convey information or trigger tasks outside of the module.
+
+## Return value(s)
+
+These limitations around inputs & outputs demonstrates the need for another approach to send information outside of the module when it comes to server to server communication.
+
+A critical notion that is on one side somehow obvious and well documented but on the other side not so common among Shiny module tutorials & articles is the return value.
+
+Remember, we used the `moduleServer` function to launch the module server.\
+A quick overview over the help page (`?moduleServer`) of the function shows a Value section:
+
+> **Value**
+>
+> The return value, if any, from executing the module server function
+
+In many cases, the call to `moduleServer` is itself wrapped into a function as described in the function examples. So the return value of the `moduleServer` will become the return value of the wrapper function[^communication-from-module-1] and be passed to the parent of the module.
+
+[^communication-from-module-1]: Expect if you add extra expressions after the call to moduleServer()!
+
+This behavior is well documented in an article of the Shiny website: [@positShinyCommunication]\
+It's also detailed in the chapter dedicated to module in the Mastering Shiny book: [@returnValue]
+
+But somehow I feel like this is something you can easily miss as you discover Shiny and starts with the modules (it actually took me some time to understand this).
+
+The [module-return-value](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-return-value) folder of the GitHub repository linked to this book implements a very simple example of a module that returns a value.
+
+The module ui function implements the same input as we saw before:
+
+```{r}
+#| eval: false
+
+  # -- input
+  numericInput(inputId = ns("numeric"),
+               label = "Module server input",
+               value = 0)
+  
+```
+
+This time, the module server contains a single line[^communication-from-module-2] with a reactive that wraps the module input value:
+
+[^communication-from-module-2]: Otherwise the return value is as usual the last expression of the function unless an explicit return is used elsewhere.
+
+```{r}
+#| eval: false
+ 
+module_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+
+    # -- return value
+    reactive(input$numeric)
+
+  })
+}
+
+```
+
+The call to the module function in the main server is assigned to an object (like when calling any regular function):
+
+```{r}
+#| eval: false
+
+rv <- module_server(id = "module")
+
+```
+
+Listening to the `rv` object allows to print its content to the console (here the user just increments the numeric input value in the ui):
+
+> Listening on http://127.0.0.1:5265\
+> Module return value = 0\
+> Module return value = 1\
+> Module return value = 2
+
+So basically when the user updates the numeric input value in the ui, it is passed to the module through the input object, triggers the reactive update that is accessible from the return value assigned in the main server.
+
+While it may sound complicated, this is what modular architecture means: independent tasks are performed inside independent components and access to the components information is done through dedicated connectors so that the dependency is only on the connector itself[^communication-from-module-3].
+
+[^communication-from-module-3]: As long as it's nature is not modified. If you replace for example a logical by a string it will very likely break some tests later in the code.
+
+::: callout-warning
+There is an critical point to understand here.\
+The input value could literaly be accessed directly from the main server: remember it could see the module entry in its own input list and basically it's possible to access the value with `input$'module-numeric'` but this would definitely break the modular approach!
+:::
+
+At this point, you may ask yourself why the title of this section is return value*(s)* instead of return value.\
+Well I am not sure how appropriate the term return value is. Because a function returns an object rather than a formal value. Remember the `NS` function returns... a function! So I invite you to see the return value of the module server function as a standard R object that could basically be anything you like - *except you most probably need to return something that will be reactive to the module content*.
+
+We will cover later in detail <!--# insert Xref here -->) how to build complex return values but the idea is that you can use a list to wrap several objects you would like to communicate to the parent of the module server.
+
+```{r}
+#| eval: false
+
+module_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+
+    # -- return value
+    list(
+      reactive(input$numeric),
+      reactive(input$text))
+
+  })
+}
+
+```

@@ -9,6 +9,7 @@ book:
     - index.qmd
     - intro.qmd
     - communication-inside-module.qmd
+    - communication-from-module.qmd
     - references.qmd
   page-footer:
     border: false
