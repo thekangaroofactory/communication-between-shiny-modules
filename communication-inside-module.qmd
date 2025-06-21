@@ -16,12 +16,12 @@ moduleServer(id, function(input, output, session) {
 })
 ```
 
-If you have a look at the `moduleServer` function[^summary-1] you will see that the second argument called `module` is later passed to the `callModule` function that itself defines a `childScope` object used to call the module function.[^summary-2]\
+If you have a look at the `moduleServer` function[^communication-inside-module-1] you will see that the second argument called `module` is later passed to the `callModule` function that itself defines a `childScope` object used to call the module function.[^communication-inside-module-2]\
 The `childScope` object is build based on the `id` that is pass to the `moduleServer`, so the function defining the module server logic is basically called with its input / output arguments limited to the scope defined by the `id`.
 
-[^summary-1]: You can do this with a CTRL + left click on the function's name in your code.
+[^communication-inside-module-1]: You can do this with a CTRL + left click on the function's name in your code.
 
-[^summary-2]: Indeed as module = function(), passing module just pass the reference to the function while module() actually calls the function.
+[^communication-inside-module-2]: Indeed as module = function(), passing module just pass the reference to the function while module() actually calls the function.
 
 This is the reason why a module server can't see outside of it's own objects.
 
@@ -82,6 +82,12 @@ So the "numeric" input that we defined in the module ui function will become "mo
 
 > <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
 
+``` html
+<input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">
+```
+
+{{< <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0"> >}}
+
 This explains why the main server sees a "module-numeric" entry in its own input list.
 
 Remember that input names need to be unique, so using namespace lifts this restriction at the module level (in particular if you call same module several times within the same app with different ids).
@@ -109,9 +115,9 @@ The output defined in the module server function is named without using the name
 output$text <- renderText("This is a sample")
 ```
 
-But it is seen by **both** the module and the main servers with its encapsulated (wrapped into its namespace) name[^summary-3]:
+But it is seen by **both** the module and the main servers with its encapsulated (wrapped into its namespace) name[^communication-inside-module-3]:
 
-[^summary-3]: Displaying the outputs to the console has been done thanks to this answer [@getShinyOutputs]
+[^communication-inside-module-3]: Displaying the outputs to the console has been done thanks to this answer [@getShinyOutputs]
 
 > ```         
 > Listening on http://127.0.0.1:5265
