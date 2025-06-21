@@ -32,7 +32,9 @@ For example, using `str(input)` inside the module server function will show that
 
 This means that, as long as you run it within a reactive context, you can access the names of the module input to figure out what the module actually receives.
 
+::: callout-note
 The [module-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-input) folder of the GitHub repository linked to this book implements a very simple example of a module that contains a single input.
+:::
 
 The input is defined in the module ui function:
 
@@ -116,8 +118,8 @@ But it is seen by **both** the module and the main servers with its encapsulated
 [^communication-inside-module-3]: Displaying the outputs to the console has been done thanks to this answer [@getShinyOutputs]
 
 > Listening on http://127.0.0.1:5265\
-> Outputs seen from the module server:  module-text\
-> Outputs seen from the main server:  module-text
+> Outputs seen from the module server: module-text\
+> Outputs seen from the main server: module-text
 
 That's one big difference here. No matter where you would like to access this output, it will require to use the namespace function:
 

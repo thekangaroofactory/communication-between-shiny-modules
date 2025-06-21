@@ -59,7 +59,9 @@ It's also detailed in the chapter dedicated to module in the Mastering Shiny boo
 
 But somehow I feel like this is something you can easily miss as you discover Shiny and starts with the modules (it actually took me some time to understand this).
 
+::: callout-note
 The [module-return-value](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-return-value) folder of the GitHub repository linked to this book implements a very simple example of a module that returns a value.
+:::
 
 The module ui function implements the same input as we saw before:
 
@@ -114,7 +116,8 @@ While it may sound complicated, this is what modular architecture means: indepen
 [^communication-from-module-3]: As long as it's nature is not modified. If you replace for example a logical by a string it will very likely break some tests later in the code.
 
 ::: callout-warning
-There is an critical point to understand here.\
+There is an critical point to understand here.
+
 The input value could literaly be accessed directly from the main server: remember it could see the module entry in its own input list and basically it's possible to access the value with `input$'module-numeric'` but this would definitely break the modular approach!
 :::
 

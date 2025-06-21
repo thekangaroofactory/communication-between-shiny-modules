@@ -25,9 +25,17 @@ In most cases, this relationship will be between the main server and the module 
 
 This very often ends up in a global app architecture that involves a main server, child / siblings modules as well as nested modules. All of them need to interact with each others to drive the ui but also listen to its events to trigger actions resulting in very complex communication challenges.
 
-The challenges are even more complex as modules are running in their own context where they only see their own inputs & outputs[^intro-2] - this is called namespace and the logic behind is explained here: [@masteringshinyChapterShiny]
+The challenges are even more complex as modules are running in their own context where they only see their own inputs & outputs[^intro-2] - this is called namespace and the logic behind is explained here: [@namespacing]
 
 [^intro-2]: This can be extended to objects in general since they are encapsulated inside functions!
 
 This book will guide you through the journey to mastering the communication between Shiny modules. It starts with the communication inside a single module to setup the basis, continues with the communication from a module to its parent as well as from its parent before diving into more complex implementations like communication between modules and nested modules.\
 It will also extend to building complex communication instructions as I believed it's one of the key approaches to reduce the multiplication of communication components within a complex app.
+
+::: callout-note
+This book references a GitHub repository that contains examples to illustrate the different chapters and sections.
+
+It is accessible here: [template-r-shiny-communication](https://github.com/thekangaroofactory/template-r-shiny-communication)
+
+The repository contains several folders that are linked to specific chapters & sections of this book.
+:::
