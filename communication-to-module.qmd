@@ -1,0 +1,156 @@
+# Communication to the module (from it's parent)
+
+As discussed before, Shiny modules are used inside wider apps and there are many reasons why you would like to send data, information, values to the module to perform some internal tasks.
+
+Again, this chapter will use the parent-child relationship as a basis to allow extension to nested module implementation, but the examples will stick to a single module called from the main server.
+
+## Inputs
+
+The goal here in this section is - *again* - to explain why inputs should not be used to communicate to the module except for the user to directly interact with the module from the ui.
+
+When we create input components in the module, we have the feeling that it is specific to the module and not accessible from anywhere else but this is actually not the case. The fact is that scoping gives us this impression because of the namespace, but if you take it as a whole, it is indeed accessible.
+
+Remember in the communication inside module chapter ( <!--# cross reference -->), we saw how both the module and the main servers could see the input created from the module.
+
+Well... the input was not exactly created in the module. The module ui function implemented a `numericInput` but this function was called from... the main ui using the module `id` as a parameter. So that the creation of the input was somehow delegated to a function that was delivered with the module.
+
+Technically, you could get rid of this function and directly implement an input at the main app level passing the `inputId` along with the namespace of the module (its `id`) to the `NS` function and still trigger the input listener inside the module.
+
+Say a module called with `id = "module"` has the following listener:
+
+```{r}
+#| eval: false
+
+observeEvent(input$button, print("I was hit"))
+
+```
+
+You could literally implement a button in the main app (ui or server) to trigger it:
+
+```{r}
+#| eval: false
+
+actionButton(inputId = NS(namespace = "module", id = "button"))
+
+```
+
+Then why should we avoid it?\
+Well the reason is the same as usual: this breaks the modular architecture.
+
+By doing this, we would create dependencies between code **written** at the main app and a specific listener from inside the module. When the app becomes more complex, such approach makes it hard to follow, understand, control and maintain.
+
+In conclusion, module inputs should only be used to capture information from the ui through an interaction with the user and their implementation should be kept at the module's level (in the module server or dedicated functions delivered within the module context).
+
+## Outputs
+
+Outputs can't be considered as communication objects to the module as they are meant to render reactive expressions to the app ui. They are basically communication objects from the module towards the ui through their parent(s).
+
+## Parameters
+
+Just as module server functions have a return value like any other function, they can take parameters.\
+Remember this is described in the `moduleServer` documentation [page](https://shiny.posit.co/r/reference/shiny/latest/moduleserver.html):
+
+> If you want to pass extra parameters to the module's server logic,\
+> you can add them to your function.
+
+In particular, they can take reactive parameters, which means they can listen to reactives coming from their parent that will trigger actions inside the module.
+
+::: callout-note
+The [module-parameter](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-parameter) folder of the GitHub repository linked to this book implements an example of a module that accepts parameters.
+:::
+
+In this example, two parameters has been added to the server module function:
+
+```{r}
+#| eval: false
+
+
+module_server <- function(id, trigger = NULL, debug = FALSE){}
+
+```
+
+-   `trigger` is the reactive parameter used to... trigger a task inside the module\
+    (here it's just going to print a message to the console)
+
+-   `debug` is a static (*standard*) parameter used to set some option at module start-up\
+    (here it's just going to print the value along with above message to the console)
+
+Static parameters are a nice way to implement some flexibility in the module when they are meant to be implemented in different context. A good example could be to set this `debug` parameter to the value of an environment variable with the `Sys.getenv()` function. Depending on the environment, the module would print more or less traces to the console.
+
+But static parameters are... static! So they convey a single information that does not evolve over time.\
+That's why reactive parameters are definitely a game changer.
+
+::: callout-important
+When we say reactive parameters, it's important to understand that we are talking about the *reference* of the reactive object, not its *value*!
+
+It means the reactive object should be passed **without** ()\
+The value itself will be accessed inside the module server.
+:::
+
+In the main server, a reactive object is defined:
+
+```{r}
+#| eval: false
+
+hit_module <- reactive(input$button)
+
+```
+
+Whenever the corresponding `actionButton` will be hit by the user in the ui, this `hit_module` reactive object will be updated[^communication-to-module-1] with the integer returned by the input.
+
+[^communication-to-module-1]: As long as it is used somewhere in the code.
+
+Then the server module function is called with the parameters:
+
+```{r}
+#| eval: false
+
+module_server(id = "module", trigger = hit_module, debug = TRUE)
+
+```
+
+Here `debug` is set to `true` to display additional traces.
+
+Notice that we used `trigger = hit_module` to pass the reference of the reactive object, not its value.\
+If you pass `hit_module()` to the parameter, then you transform it into a static parameter and it's value - *from inside the module* - will never change.
+
+A good practice to avoid mistakes (and R to fail with an error about trying to access something that is not a function) is to implement a test at the beginning of the module server function:
+
+```{r}
+#| eval: false
+
+stopifnot(is.reactive(trigger))
+
+```
+
+With this, if someone is trying to call your module with `trigger = hit_module()`, it will stop with an error showing that the expected parameter should be a reactive object.
+
+From there all you need to do is have somewhere in the module server function a listener that takes dependency on this parameter:
+
+```{r}
+#| eval: false
+
+observe({
+      cat("Module reactive parameter hit \n")
+
+      # -- dummy expression to take dependency on the parameter
+      foo <- trigger()
+
+      # -- to demonstrate static parameter
+      if(debug)
+        cat("- trigger =", trigger(), "\n")})
+
+```
+
+Here `observe` has been used but any reactive expression could be used.\
+In particular, render functions can be used as well. Say you have a module that delivers a special plot as an output using the `renderPlot` function. You could imagine that the data is passed to the module as a reactive argument, so that the plot will be updated each time the data is changed.
+
+Now you may ask yourself why an `actionButton` that triggers an action inside the module would be declared and listened outside of it! Well in general it would be recommended to keep both the input and its listener inside the module to keep things simple and avoid unnecessary complexity, but in case the button is used to trigger actions in different modules, this app design would definitely be a good pick.
+
+Imagine you have an input to switch between light / dark modes. This will obviously affect several modules in a complex app, and having a single input at the main app level makes sense. Now the only way to make different modules aware of the selected mode is to pass the input value as a reactive argument of the module server function.
+
+It's important to mention here that this reactive parameter can take any kind of value / information - i.e. not necessarily an input value. One could pass a data.frame for example after some filtering / slicing is performed at the main server level, a list of ids for the module to select data, or the result of any computation that is needed in the module server.
+
+::: callout-tip
+In the chapter <!--# xref here! -->, you can discover how to build complex expressions to pass multiple information to the module and trigger flexible tasks from outside the module.
+:::
