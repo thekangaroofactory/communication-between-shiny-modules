@@ -10,6 +10,7 @@ book:
     - intro.qmd
     - communication-inside-module.qmd
     - communication-from-module.qmd
+    - communication-to-module.qmd
     - references.qmd
   page-footer:
     border: false
