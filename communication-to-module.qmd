@@ -142,6 +142,13 @@ observe({
 
 ```
 
+When the app is launched, the main server's reactive is updated with the input (incremental number) of the `actionButton` and the module server action is triggered each time the user click the button in the ui:
+
+> Listening on <http://127.0.0.1:5538>\
+> Module reactive parameter hit - trigger = 0\
+> Module reactive parameter hit - trigger = 1\
+> Module reactive parameter hit - trigger = 2
+
 Here `observe` has been used but any reactive expression could be used.\
 In particular, render functions can be used as well. Say you have a module that delivers a special plot as an output using the `renderPlot` function. You could imagine that the data is passed to the module as a reactive argument, so that the plot will be updated each time the data is changed.
 
