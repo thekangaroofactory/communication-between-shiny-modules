@@ -1,0 +1,75 @@
+# Communication between modules
+
+This is I believe a topic that is not so well documented[^communication-between-modules-1], but not so different from previous chapters.
+
+[^communication-between-modules-1]: There is a good introduction article in the Shiny documentation [@positShinyCommunication], but it relies on the `callModule` function while it's help page suggests to use `moduleServer`.
+
+In my experience, every time you face a communication problem between your modules, the use case is out of the *'getting started with'* examples, which ends up in hours of online searches (assuming you're trying to understand the different options to make a wise choice - not asking a LLM).
+
+The purpose of this chapter is mostly to go through the two patterns that may be used in a complex app and demonstrate that it's not different from what we saw previously.
+
+Remember the main server / module server communication is basically parent / child communication.\
+Same applies to communication between modules.
+
+## Nested modules
+
+As mentioned earlier, there are specific use cases when a module would call another module.\
+The typical use case for this implementation is when you want to delegate some task from the module to a sub module because your module server itself is growing and requires some architecture. Another great example is when a specific task / feature is not always needed. Maybe something not all users will be allowed to use or require. In this case it's good practice to avoid the creation of reactives and observers if they will never be reached[^communication-between-modules-2].
+
+[^communication-between-modules-2]: Input entries are created only when their ui is implemented.
+
+Maybe the term *nested* is not the best because it creates some confusion over the simple main server / module server pattern. It somehow feels like it's going to be different and many (including myself) starts their journey into the module world with a biased interpretation in mind.
+
+Well basically a *nested* module is in fact a **child** of a parent module, so that it is the same as having the main server as parent and a module as a child!
+
+The only thing is that now, you need to think the communication as a two-step process.\
+Remember that everything is a child of something and runs into its own context.
+
+::: callout-important
+One key best practice here is that data / information *should*[^communication-between-modules-3] go through all levels of the architecture from the source level to the target level otherwise you will break the **mindset** of the architecture.
+:::
+
+[^communication-between-modules-3]: 'Should' because technically the main server could listen to a nested module's input with the correct namespace.
+
+Another good reason why to pass on information along the hierarchy is that it is then possible to alter this information before passing it to the next level.\
+Imagine a data.frame that is passed to a module from the main server, maybe a sub/nested module only requires a specific columns to compute a value or a plot.
+
+### Inputs
+
+Again, everything here will work exactly like we saw in the previous chapters.\
+The goal here is to observe and understand the machanism so that it will help demystify it when it comes to creating your own architecture.
+
+::: callout-tip
+The [module-nested-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-input) folder of the GitHub repository linked to this book implements a basic use case of a server / module / nested module implementation to support this section.
+:::
+
+In this example, the main app server calls a module server function in which the sub / nested module server is itself called.
+
+![Nested module architecture](image/nested-module-architecture.png)
+
+### Outputs
+
+### Parameters
+
+### Return value(s)
+
+## Siblings modules
+
+explain that this in fact does not exist.
+
+siblings = child - parent - child so we are back to the parent - child relationship
+
+provide an example
+
+Siblings modules\
+It's very common to implement modules at the same level, in particular as children of the main server.\
+main \> module 1 \| module 2
+
+We've seen how to communication from main to server 1 or server 2 and back but how to communication from server 1 to server 2?\
+Check options:
+
+```         
+through the parent (param / return value + transformation) directly through the reactive references (still need to pass them via the parent) 
+```
+
+Again it's recommended to implement proxy return values to avoid altering the data itself.

@@ -11,6 +11,7 @@ book:
     - communication-inside-module.qmd
     - communication-from-module.qmd
     - communication-to-module.qmd
+    - communication-between-modules.qmd
     - references.qmd
   page-footer:
     border: false
