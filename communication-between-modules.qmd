@@ -192,9 +192,95 @@ There is no backward communication since outputs are just meant to display conte
 
 ### Parameters
 
-xxx
+As we saw earlier, parameters are used in a quite standard way when it comes to module server functions and having nested modules is no exception to that.
 
-xxx
+::: callout-tip
+The [module-nested-parameter](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-parameter) folder of the GitHub repository linked to this book implements the use case of a server / module / nested module implementation to support this section.
+:::
+
+The idea here is to observe how an input value can be passed on from the main server (main app level) to the sub-module. In order to make thinks a bit more realistic[^communication-between-modules-10], the input value will be altered as the module server level.
+
+[^communication-between-modules-10]: Use-cases are voluntarily very simple to avoid mixing notions as they are meant to support a specific section of the book.
+
+This time the main app is just composed of a `numericInput` on ui side, and the server is listening to its value:
+
+```{r}
+#| eval: false
+
+function(input, output, session) {
+
+  # -- declare reactive (to pass on to the module)
+  foo <- reactive({
+    cat("Server input update / value =", input$numeric, "\n")
+    input$numeric})
+
+  # -- launch module server
+  module_server(id = "module", trigger = foo)
+
+}
+
+```
+
+We could just set `trigger = reactive(input$numeric)` but the intermediate `foo` reactive helps showing that we actually pass the reference of the reactive (i.e. not its value) to the function parameter.
+
+The module server listens to this reactive just like it did in the module communication chapter except this time we will wrap the dependency into a `reactive`[^communication-between-modules-11] as well:
+
+[^communication-between-modules-11]: Indeed, we need a reactive component that returns a value!
+
+```{r}
+#| eval: false
+
+module_server <- function(id, trigger) {
+  moduleServer(id, function(input, output, session) {
+
+    # -- check parameter
+    stopifnot(is.reactive(trigger))
+
+    # -- listen to the trigger & create a reactive
+    bar <- reactive({
+      cat("Module parameter update / value =", trigger(), "\n")
+      trigger() * 2})
+
+    # -- call nested module
+    sub_module_server(id = "submodule", trigger = bar)
+
+  })
+}
+
+```
+
+The sub-module server only observes its reactive parameter (reinforcing the idea that it could be used in any kind of component as long as you take a dependency on its value):
+
+```{r}
+#| eval: false
+
+observeEvent(trigger(),
+             cat("Sub-module parameter update / value =", trigger(), "\n"))
+
+```
+
+At launching, the console will display the initial trace (the input is valuated with 0 at start-up). Here the user has clicked once on the `numericInput` increment arrow:
+
+> Listening on <http://127.0.0.1:3270> \
+> Server input update / value = 0 \
+> Module parameter update / value = 0 \
+> Sub-module parameter update / value = 0 \
+> Server input update / value = 1 \
+> Module parameter update / value = 1 \
+> Sub-module parameter update / value = 2
+
+As expected the value is passed from the main server to the module server.\
+It is then altered and passed on to the sub-module server.
+
+::: callout-note
+Note that we chose to pass on the input value defined at the main level, but we could pass any kind of data.
+:::
+
+The resulting communication schema is as follows:
+
+![Nested module parameter communication](image/nested-module-parameter-communication.png)
+
+The important takeaway here is that the key to launch specific tasks inside a module is to pass a reactive **reference** as a parameter and take dependency on it inside the module.
 
 ### Return value(s)
 
