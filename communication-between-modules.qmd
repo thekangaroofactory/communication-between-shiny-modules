@@ -47,6 +47,90 @@ In this example, the main app server calls a module server function in which the
 
 ![Nested module architecture](image/nested-module-architecture.png)
 
+The sub module has a `sub_module_ui` function which defines a text input:
+
+```{r}
+#| eval: false
+
+sub_module_UI <- function(id) {
+
+  # -- declare input
+  textInput(inputId = NS(id, "text"),
+            label = "Sub module server input",
+            value = "")
+
+}
+
+```
+
+The key notion to understand here is that as long as you pass the *'correct'* `id` value to the function, it could be used at any level (typically the main server) to implement the input. But as long as you made a choice to implement a sub module level, you should stick to only create parent-child **dependencies**.
+
+This means the sub module ui function should always be called from its parent - no matter if the parent is the main server or another module (this is what encapsulation actually means).
+
+```{r}
+#| eval: false
+
+module_UI <- function(id) {
+
+  # -- return
+  tagList(
+
+    # -- module input
+    numericInput(inputId = NS(id, "numeric"),
+                 label = "Module server input",
+                 value = 0),
+
+    # -- sub module ui
+    sub_module_UI(NS(id, "submodule")))
+
+}
+
+```
+
+To ensure this encapsulation principle, the `sub_module_UI` function is called from the `module_UI` function. In most cases, you will add more content together with the ui coming from the sub module - here we add a numeric input - but you may also just create a wrapper function around the sub module ui function.
+
+::: callout-tip
+Have you ever played around with the `NS()` function?
+
+Notice how we keep using `NS(id, "some_inputId")` at each module level.\
+Calling `module_UI(id = "module")` will then call `sub_module_UI(NS(id, "submodule"))` that in turn calls `textInput(inputId = NS(id, "text"), ...)`
+
+Well this is just like calling `NS(NS("module", "submodule"), "text")` which ends up in
+
+> "module-submodule-text"
+
+In fact, `NS` even accepts vectors like `NS(c("foo", "bar"), "zoo")` but I don't see any use case except if you break the encapsulation (which in turn is not a valid use case).
+:::
+
+The resulting UI architecture looks like this:
+
+![Nested module UI](image/nested-module-ui.png)
+
+You may ask yourself why I put the modules ui functions inside dotted boxes.\
+Well, they are not *really* executed like that nor at different levels since they are only called from the main app ui as a chain[^communication-between-modules-4]! Only the namespace assignment makes their input visible to a certain module / level in the architecture. This ensures that a given module can be used at any level of the hierarchy (we could imagine of a module being used in different branch at different levels for example).
+
+[^communication-between-modules-4]: So it's more main app ui \> module ui \> sub module ui
+
+All of the three servers have a listener that prints the `names` of the input list:
+
+> Listening on http://127.0.0.1:7393\
+> Input(s) seen by the sub-module server: text\
+> Sub-module input =\
+> Input(s) seen by the module server: numeric / submodule-text\
+> Module input = 0\
+> Input(s) seen by the main server: module-numeric / module-submodule-text
+
+See how everything is really a matter of context / scope and parent-child relationship!\
+Basically, if you say zoom on the module and sub module levels, you get exactly the same result as the one we saw in the module communication chapters.
+
+When building an architecture for your apps, it's key to keep in mind how the information flow goes through the different layers (and between the ui / server sides):
+
+![Nested module input communication process](image/nested-module-input-communication.png)
+
+While the ui representation of an input goes up through the ui functions, its value on server side goes down from a level to the next one and is directly[^communication-between-modules-5] accessible at the right level thanks to the namespace mechanism.
+
+[^communication-between-modules-5]: By *directly*, I mean through an `input$foo` instruction
+
 ### Outputs
 
 ### Parameters
