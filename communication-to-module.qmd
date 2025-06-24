@@ -65,7 +65,7 @@ In this example, two parameters has been added to the server module function:
 #| eval: false
 
 
-module_server <- function(id, trigger = NULL, debug = FALSE){}
+module_server <- function(id, trigger, debug = FALSE){}
 
 ```
 
