@@ -37,7 +37,7 @@ Imagine a data.frame that is passed to a module from the main server, maybe a su
 ### Inputs
 
 Again, everything here will work exactly like we saw in the previous chapters.\
-The goal here is to observe and understand the machanism so that it will help demystify it when it comes to creating your own architecture.
+The goal here is to observe and understand the mechanism so that it will help demystify it when it comes to creating your own architecture.
 
 ::: callout-tip
 The [module-nested-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-input) folder of the GitHub repository linked to this book implements a basic use case of a server / module / nested module implementation to support this section.
@@ -184,7 +184,7 @@ Let's recap all this in a communication schema:
 
 ![Nested module output communication](image/nested-module-output-communication.png)
 
-Outputs are defined on the server side, then consumed on the ui side **at the same leve**l, then go up through the ui functions just as the inputs did[^communication-between-modules-9].
+Outputs are defined on the server side, then consumed on the ui side **at the same level**, then go up through the ui functions just as the inputs did[^communication-between-modules-9].
 
 [^communication-between-modules-9]: Because they are basically HTML at this stage
 
