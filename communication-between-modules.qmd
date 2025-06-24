@@ -133,7 +133,68 @@ While the ui representation of an input goes up through the ui functions, its va
 
 ### Outputs
 
+Here we will just implement same basic example as for the module communication to see how things go.\
+Remember that outputs are meant to communicate / render information from the server side to the ui side up to the main app level (what the users see).
+
+::: callout-tip
+The [module-nested-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-output) folder of the GitHub repository linked to this book implements a basic use case of a server / module / nested module implementation to support this section.
+:::
+
+Basically it has the same architecture as the previous section's example except all three servers (main, module & sub-module) focus on the outputs.
+
+They implement a simple text output[^communication-between-modules-6] :
+
+[^communication-between-modules-6]: Note that in real life, this `renderText` would involve some dynamic content (or be on ui side)
+
+```{r}
+#| eval: false
+
+output$text <- renderText("This is a sample text from the main server")
+
+```
+
+And use the same approach as for the module communication to explore the visible outputs:
+
+```{r}
+#| eval: false
+
+outs <- outputOptions(output)
+cat("Outputs seen from the main server: ", paste(names(outs), collapse = " / ", "\n"))
+
+```
+
+The output from the sub-module server is rendered inside the `sub_module_UI` function while the one from the module server is rendered in the `module_UI` function along with a call to the sub-module ui function[^communication-between-modules-7].
+
+[^communication-between-modules-7]: Same approach as for the inputs
+
+When launching the app, the console will display this:
+
+> Listening on <http://127.0.0.1:7393>\
+> Outputs seen from the submodule server: module-submodule-text\
+> Outputs seen from the module server: module-submodule-text / module-text\
+> Outputs seen from the main server: module-submodule-text / module-text / text
+
+::: callout-note
+Notice how the module and sub-module servers only see the outputs from their own scope but still see them with their names wrapped into the namespace[^communication-between-modules-8].
+:::
+
+[^communication-between-modules-8]: That's because you can't read outputs unless you pass them to \*output functions (here `textOutput`)
+
+Let's recap all this in a communication schema:
+
+![Nested module output communication](image/nested-module-output-communication.png)
+
+Outputs are defined on the server side, then consumed on the ui side **at the same leve**l, then go up through the ui functions just as the inputs did[^communication-between-modules-9].
+
+[^communication-between-modules-9]: Because they are basically HTML at this stage
+
+There is no backward communication since outputs are just meant to display content into the browser.
+
 ### Parameters
+
+xxx
+
+xxx
 
 ### Return value(s)
 
