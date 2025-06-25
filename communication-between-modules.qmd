@@ -261,12 +261,12 @@ observeEvent(trigger(),
 
 At launching, the console will display the initial trace (the input is valuated with 0 at start-up). Here the user has clicked once on the `numericInput` increment arrow:
 
-> Listening on <http://127.0.0.1:3270> \
-> Server input update / value = 0 \
-> Module parameter update / value = 0 \
-> Sub-module parameter update / value = 0 \
-> Server input update / value = 1 \
-> Module parameter update / value = 1 \
+> Listening on <http://127.0.0.1:3270>\
+> Server input update / value = 0\
+> Module parameter update / value = 0\
+> Sub-module parameter update / value = 0\
+> Server input update / value = 1\
+> Module parameter update / value = 1\
 > Sub-module parameter update / value = 2
 
 As expected the value is passed from the main server to the module server.\
@@ -283,6 +283,78 @@ The resulting communication schema is as follows:
 The important takeaway here is that the key to launch specific tasks inside a module is to pass a reactive **reference** as a parameter and take dependency on it inside the module.
 
 ### Return value(s)
+
+Just as we can pass parameters from server function to server function, it's possible to pass their return value(s) from one level to another.
+
+Remember that module server functions are like any other function in the sense that they return a value to the caller and all you need to do is assign this return value at the upper level.
+
+::: callout-tip
+The [module-nested-return-value](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-return-value) folder of the GitHub repository linked to this book implements the use case of a server / module / nested module implementation to support this section.
+:::
+
+The use case here is very simple. The goal is just to pass on some return value from the sub-module up to the main server. There's no ui involved except at the main level to display the value and demonstrate the reactive process.
+
+Let's start with the sub-module server to follow the flow of information:
+
+```{r}
+#| eval: false
+
+# -- return value
+reactive({
+  
+  # -- Re-execute this reactive expression after 1 second
+  invalidateLater(1000)
+  
+  # -- random value
+  rnorm(n = 1)
+  
+})
+
+```
+
+It contains a single reactive instruction (so this will become the return value).\
+I've used the `invalidateLater` function to avoid creating an input that would bring some 'noise' into the code. It will somehow force the reactive to update itself after a delay.
+
+The module server function captures this return value by assigning the result of the call to the sub-module function to an object:
+
+```{r}
+#| eval: false
+
+# -- call nested module
+bar <- sub_module_server(id = "submodule")
+
+# -- return value
+bar
+
+```
+
+There's a bit of a nonsense here because as long as you don't do anything with `bar` and just returns it in the next line, it should just be `sub_module_server(id = "submodule")` and the module server function would return... the return value from the sub-module.
+
+I'm just writing these two lines to make things explicit, assuming that in most cases, there will be other instructions in the module functions, and most probably some computation in between the call to the sub-module server function and the return instruction of the module server function.
+
+The main server function calls in turn the module server function and reuses its reactive return value to build an output for the ui to display:
+
+```{r}
+#| eval: false
+
+# -- launch module server
+foo <- module_server(id = "module")
+
+# -- define output
+output$box <- renderUI(value_box(title = "From main server",
+                                 value = foo()))
+
+```
+
+When you launch that app, you will get a box on the ui which content value will be updated on every second, showing that the value defined at the sub-module server level is passed up to the main server level through the reactive return values.
+
+The communication schema is quite simple here:
+
+![Nested module return value communication](image/nested-module-return-value-communication.png)
+
+### Conclusion
+
+As you can see, everything works the same as with a single module as long as you consider only parent-child relationships. That is something critical to include from the very beginning of your architecture thinking as you don't want to pass unnecessary data from a module to another one just to feed the next level. In this case it's better to have the second module at the same level as the first one and this is what we are going to explore next.
 
 ## Siblings modules
 
