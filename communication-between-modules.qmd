@@ -371,7 +371,7 @@ So if we come back to the notion of siblings module, it is in fact just two auto
 
 We've seen how to communication from the main server to a module server and back but how to communicate from module server 1 to module server 2?
 
-## Inputs
+### Inputs
 
 We've seen how inputs are dedicated to ui / server communication and why hey should stick to it.\
 This section will just describe what we can observe within each scope to set the context and make sure you get a strong understanding of the workflow.
@@ -396,4 +396,38 @@ Each module just knows about its own scope, so there is no way to directly commu
 That being said, in specific cases, you could need to pass an input *value* from one module to another.\
 But then it's just like a return value + function parameter 'combo' that we will see in a later section (see <!--# xref -->).
 
-## Outputs
+### Outputs
+
+Just like siblings module inputs are just standard module inputs, siblings module outputs don't *really* know each other and should stick to their own scope.
+
+::: callout-tip
+The [module-siblings-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-siblings-output) folder of the GitHub repository linked to this book implements the use case of a server having two modules to support this section.
+:::
+
+In this example, same architecture is kept and both module servers declare a single output and print the names of the outputs.
+
+The following is printed to the console when you launch the app:
+
+> Listening on <http://127.0.0.1:7881> \
+> Outputs seen from the module1 server: module1-text_1 \
+> Outputs seen from the module2 server: module1-text_1 / module2-text_2 \
+> Outputs seen from the main server: module1-text_1 / module2-text_2
+
+While this may look confusing since it looks like module2 can see both modules outputs but module1 only sees it's own output, a quick look at the main server provides the answer:
+
+```{r}
+#| eval: false
+
+# -- launch module servers
+module_1_server(id = "module1")
+module_2_server(id = "module2")
+
+```
+
+Since the print instruction is run only once at the module start-up and module1 is launched first, it explains that - *at the moment when the expression is evaluated in module1* - a single output is declared.
+
+What I'm trying to demonstrate here is that - from say a *technical* point of view - both outputs could just be used inside the other module's ui function[^communication-between-modules-12]. But that would immediately create confusions as well as cross dependencies that are very difficult to manage.
+
+[^communication-between-modules-12]: Or even inside the other module server function
+
+Once again, in case some module output requires data or information from another module, it should go through a return value + function parameter workflow and **only** then be part of an output expression.
