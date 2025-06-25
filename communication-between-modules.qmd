@@ -431,3 +431,63 @@ What I'm trying to demonstrate here is that - from say a *technical* point of vi
 [^communication-between-modules-12]: Or even inside the other module server function
 
 Once again, in case some module output requires data or information from another module, it should go through a return value + function parameter workflow and **only** then be part of an output expression.
+
+### Parameters & return values
+
+Both function parameters and return values just work the same with multiple siblings modules as for a single module.
+
+So as we saw in previous sections of this chapter that a mix of return value plus function parameter is the key to communicate information from a sibling module to another, we will focus here on this implementation.
+
+::: callout-tip
+The [module-siblings-communication](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-siblings-communication) folder of the GitHub repository linked to this book implements the use case of a server having two modules to support this section.
+:::
+
+Module1 server function contains a single reactive expression that again will update itself on every second thanks to the `invalidateLater` function:
+
+```{r}
+#| eval: false
+
+# -- return value
+reactive({
+  
+  # -- force update the reactive every 1 second
+  invalidateLater(1000)
+  
+  # -- random value
+  rnorm(n = 1)
+  
+})
+
+```
+
+This automatically becomes the return value of the module1's server function which is assigned to an object at the main server level:
+
+```{r}
+#| eval: false
+
+# -- launch module server and assign return value
+foo <- module_1_server(id = "module")
+
+# -- launch module server and pass parameter
+module_2_server(id = "module", trigger = foo)
+
+```
+
+This (reactive) object is in turn passed to the second module as a parameter of the server function which takes a dependency on it to print the value to the console:
+
+> Listening on <http://127.0.0.1:7881> \
+> Module2 parameter update, value = 0.6908065 \
+> Module2 parameter update, value = -0.8008129 \
+> Module2 parameter update, value = -1.612656
+
+It's important here to understand that module1 actually communicates to module2 since the reference of the reactive is passed from module1 to the main server then to module2. So when the reactive is updated in module1, it *directly* triggers action inside module2.
+
+Of course, you could also imagine that the main server has some work to do with the return value before pushing it to the second module and the information workflow would become a cascading process.
+
+::: callout-note
+Also note that both modules could communicate information to each other **as long as** you don't create a reactive loop!
+:::
+
+![siblings modules communication](image/siblings-modules-communication.png)
+
+This is a very powerful and efficient communication workflow and will be the basis for the wrap up use case we will study in the next chapter.
