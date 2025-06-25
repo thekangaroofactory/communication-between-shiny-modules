@@ -358,21 +358,42 @@ As you can see, everything works the same as with a single module as long as you
 
 ## Siblings modules
 
-explain that this in fact does not exist.
+When your modules are handling separate tasks or features that do not directly involve the other modules, it's better to keep them at the same level to reduce the information workflow and keep the architecture easier to understand.
 
-siblings = child - parent - child so we are back to the parent - child relationship
+We sometimes talk about siblings module in the sense that they belong to the same level of hierarchy in the application architecture, but this introduces a misunderstanding that siblings *usually* know each others while this is not true for modules!
 
-provide an example
+In fact, *siblings* modules don't even exist.\
+Everything is a matter of parent-child relationship **assuming** that in case there are other children, they don't know each others. One box (scope) in the hierarchy just knows about it's direct parent (who called it's server function) and about it's direct children (what server functions it calls).
 
-Siblings modules\
-It's very common to implement modules at the same level, in particular as children of the main server.\
-main \> module 1 \| module 2
+Everything else is a blackbox that it **should** know nothing about.
 
-We've seen how to communication from main to server 1 or server 2 and back but how to communication from server 1 to server 2?\
-Check options:
+So if we come back to the notion of siblings module, it is in fact just two autonomous parent-child relationships and the parent has to deal with all the communication.
 
-```         
-through the parent (param / return value + transformation) directly through the reactive references (still need to pass them via the parent) 
-```
+We've seen how to communication from the main server to a module server and back but how to communicate from module server 1 to module server 2?
 
-Again it's recommended to implement proxy return values to avoid altering the data itself.
+## Inputs
+
+We've seen how inputs are dedicated to ui / server communication and why hey should stick to it.\
+This section will just describe what we can observe within each scope to set the context and make sure you get a strong understanding of the workflow.
+
+::: callout-tip
+The [module-siblings-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-siblings-input) folder of the GitHub repository linked to this book implements the use case of a server having two modules to support this section.
+:::
+
+So basically the main server function calls two module server functions and both modules have a ui function implementing a specific input.
+
+When you start the app, the entries of the input list are displayed to the console for each server:
+
+> Listening on <http://127.0.0.1:7881> \
+> Input(s) seen by the module_1 server: numeric \
+> Input(s) seen by the module_2 server: text \
+> Input(s) seen by the main server: module1-numeric / module2-text
+
+Basically, everything here works just like for when we had only one module (see xref <!--# xref --> chapter for detailed decription).
+
+Each module just knows about its own scope, so there is no way to directly communicate an input from a module to another one, which is great since as we saw, an input is meant to communicate from the ui to the specific module server. So if you need to pass an input to module 1 or module 2, then this input should be in priority defined in the corresponding module.
+
+That being said, in specific cases, you could need to pass an input *value* from one module to another.\
+But then it's just like a return value + function parameter 'combo' that we will see in a later section (see <!--# xref -->).
+
+## Outputs
