@@ -490,4 +490,4 @@ Also note that both modules could communicate information to each other **as lon
 
 ![siblings modules communication](image/siblings-modules-communication.png)
 
-This is a very powerful and efficient communication workflow and will be the basis for the wrap up use case we will study in the next chapter.
+This is a very powerful and efficient communication workflow and will be the basis for the wrap up use case we will study at the end of the book (see <!--# xref -->).
