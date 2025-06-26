@@ -12,6 +12,7 @@ book:
     - communication-from-module.qmd
     - communication-to-module.qmd
     - communication-between-modules.qmd
+    - ui-server.qmd
     - references.qmd
   page-footer:
     border: false
