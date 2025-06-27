@@ -1,0 +1,80 @@
+---
+bibliography: references.bib
+---
+
+# Additional considerations for parameters & return values
+
+There's one point that was omitted in the previous chapters & sections about server function parameters and return values when it comes to passing reactive objects.
+
+::: callout-note
+The [additional-considerations](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/additional-considerations) folder of the GitHub repository linked to this book implements examples to support this chapter.
+:::
+
+Say you have created a `reactiveVal` object in the main server and pass its reference as a reactive parameter to the module server function:
+
+```{r}
+#| eval: false
+
+# -- create reactive value
+foo <- reactiveVal(data.frame(id = 1:3, name = paste0("name_", 1:3)))
+
+# -- launch module server and pass parameter
+module_1_server(id = "module", trigger = foo)
+
+```
+
+Now some code block inside the module not only consumes the parameter, but modifies it:
+
+```{r}
+#| eval: false
+
+trigger(NULL)
+
+```
+
+Back to the main server level, observe the `reactiveVal`:
+
+```{r}
+#| eval: false
+
+observe(
+  if(is.null(foo()))
+    cat("Parameter has been overwritten with NULL! \n"))
+
+```
+
+Launching this app will output this:
+
+> Listening on <http://127.0.0.1:7881>\
+> Parameter has been overwritten with NULL!
+
+The `reactiveVal` has been updated / overwritten *everywhere* inside the app[^considerations-parameters-return-values-1].
+
+[^considerations-parameters-return-values-1]: This would not happen with a standard non-reactive parameter since you modify it within a function's context
+
+There is a good article dealing with reactive object's update: [@modifyReactive]\
+Basically, `reactiveVal` as well as `reactiveValues` objects can be updated anywhere in the app.\
+On the opposite, `reactive` or `eventReactive` objects won't let you update them in a different module / server:
+
+> Avis : Error in bar: unused argument (NULL)\
+> 81: observe\
+> 80: \<observer:observeEvent(bar())\>\
+> 1: runApp
+
+This means that one should choose carefully the type of reactive objects that are passed to a module as function parameters or returned by a module as return values.
+
+In most (if not all) cases, as long as you want to stick to having a single feature be managed in a single place, then the reference passed as a parameter should be the output of a `reactive` expression to secure that it won't be altered out of the module server in charge of it.
+
+And in case the object you want to pass is a `reactiveVal` object, then the best option is to create a *proxy* reactive expression so that it can't be updated outside of the module scope:
+
+```{r}
+#| eval: false
+
+foo <- reactiveVal(data.frame(id = 1:3, name = paste0("name_", 1:3)))
+proxy <- reactive(foo())
+
+module_1_server(id = "module", trigger = proxy)
+
+```
+
+The exact same behavior exists with reactive return values and it's critical to always take this notion into account when you create your app module architecture and the inner reactive objects if they are meant to be part of the communication process.
