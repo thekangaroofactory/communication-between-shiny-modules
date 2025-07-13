@@ -33,9 +33,9 @@ This book will guide you through the journey to mastering the communication betw
 It will also extend to building complex communication instructions as I believed it's one of the key approaches to reduce the multiplication of communication components within a complex app.
 
 ::: callout-note
-This book references a GitHub repository that contains examples to illustrate the different chapters and sections.
+This book references a GitHub repository that contains examples to illustrate the different chapters and sections. They have been build to be simple yet efficient use-cases.
 
-It is accessible here: [template-r-shiny-communication](https://github.com/thekangaroofactory/template-r-shiny-communication)
+The repository is accessible here: [template-r-shiny-communication](https://github.com/thekangaroofactory/template-r-shiny-communication)
 
-The repository contains several folders that are linked to specific chapters & sections of this book.
+It contains several folders that are linked to specific chapters & sections of this book.
 :::
