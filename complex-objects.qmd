@@ -1,0 +1,79 @@
+# Building complex communication objects
+
+Up to now and to keep things simple for someone who would discover and explore the module communication topic, communication objects - i.e. server function parameters and return value - have been kept as single reactive objects.
+
+Now what happens if you need to communicate several objects between modules?
+
+While there is an intuitive answer for the server function parameters as you can pass as many parameters as you want, there is no obvious answer for the return value to return several... values.
+
+Well when we said the communication object needs to be a reactive object to allow continuous communication workflow, it does in fact mean that some *reactivity* must be part of the object rather than the object itself.
+
+```{r}
+#| eval: false
+
+module_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+
+    # -- return value
+    reactive(input$numeric)
+
+  })
+}
+
+```
+
+This return value object (the output of the `reactive()` call) could be replaced by:
+
+```{r}
+#| eval: false
+
+module_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+
+    # -- return value
+    list(
+      numeric = reactive(input$numeric))
+
+  })
+}
+
+```
+
+In this case, accessing it from the parent server function will look like:
+
+```{r}
+#| eval: false
+
+# -- call module server
+foo <- module_server("module")
+
+# -- access the return value (should be done in a reactive context)
+foo$numeric()
+
+```
+
+This means that you can build up pretty much any kind of heterogeneous return value especially based on the very flexible `list` object type.
+
+```{r}
+#| eval: false
+
+# -- return value
+list(
+  numeric = reactive(input$numeric),
+  text = reactive(input$text),
+  complex = list(
+    static = "I'm static value",
+    dynamic = reactive(input$date_slider)))
+
+```
+
+Same can be applied to server function parameters. Actually many functions take a list of options as an argument and this of course can be applied to module server functions. The only difference compared to return value(s) is that you can use several parameters to keep things easier to understand and better organized.
+
+::: callout-note
+The [complex-values](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/complex-values) folder of the GitHub repository linked to this book implements an example of a module that implements complex parameter and return value.
+:::
+
+With this approach, you can build very powerful and flexible communication workflows between your modules.
+
+But keep in mind that more complexity implies that it is more difficult to understand and maintain the code of your application. When one takes a dependency on return value or provides reactive parameters to a module server function, it is critical that they understand the full impact it's going to cause on the behavior.\
+For this reason, module server functions should always be documented (Roxygen is amazing for that), with all the parameter and value fields well described. Another best practice is to test server function parameters to make sure they fit with the expected shape & reactivity.
