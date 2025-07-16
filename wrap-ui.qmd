@@ -1,0 +1,15 @@
+# Wrapping ui functions
+
+As we saw in the previous chapter, it's possible to reduce the complexity of the workflow by creating the inputs (but also pretty much any ui element) on the right side and at the appropriate level.
+
+Another way to reduce the amount of code (and so the overall app complexity) is to use *wrapper*[^wrap-ui-1] functions to render the HTML ui.
+
+[^wrap-ui-1]: A wrapper is just a function that is used to... wrap another function (usually without much alteration)
+
+<!--# en fait je ne trouve pas le bon use case... supprimer? -->
+
+Decrypt standard ui function they all look the same with different function names
+
+It's possible to wrap them into wrapper / helper function(s) that you can package so that there is no need to write extra code that does not bring any added value.
+
+Take example on the module-nested-output folder all ui functions are the same (module, sub module) hence could be wrapped into a single helper function that is called at different levels (different context & namespace)
