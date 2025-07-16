@@ -1,0 +1,15 @@
+# Shiny communication manifest
+
+Up to now and to keep things simple for someone who would discover and explore the module communication topic, communication objects - i.e. server function parameters and return value - have been kept as single reactive objects.
+
+Explain the two communication streams:
+
+-   input / output dedicated to ui - server communication
+
+-   server / ui should stick to the same level (same context) and cascade top & bottom (no cross dependency)
+
+-   parameters & return values dedicated to server - server communications
+
+-   where the code is located in the folder structure does not matter! could be horizontal or recursive folders
+
+It is critical to remember that both streams are targeting different activities and they most likely should never cross each other.
