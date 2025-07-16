@@ -1,0 +1,153 @@
+# Building complex input instructions
+
+As we saw earlier, inputs are objects used to convey information from the ui side to the server side.\
+This process is sending single values to a server through an input component.\
+For example, an `actionButton` will send an incremental integer, a `textInput` will send a character vector of length one.
+
+While this is just fine in most cases, this can become a limitation when facing more complex situations.
+
+::: callout-note
+The [complex-instructions](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/complex-instructions) folder of the GitHub repository linked to this book implements examples to support the use cases in this chapter.
+:::
+
+## Use case
+
+Lets imagine the following use case:\
+Say you want to dynamically create multiple ui components based on a list of objects. A typical example would be cards created based on a `data.frame`. One card is created for each row of the table.\
+Now say you want each card to contain a button for the user to interact with the given row of the `data.frame` (to update its content or anything that involves this specific row).
+
+## First approach
+
+The intuitive approach is to loop over the `data.frame` rows and create an `actionButton` with a specific `InputId` (because they need to be unique[^complex-instructions-1]), then listen to the corresponding input to trigger the expected action.
+
+[^complex-instructions-1]: If not, the browser console will raise a warning.
+
+This is similar to having several inputs declared on ui side:
+
+```{r}
+#| eval: false
+
+# -- button 1
+actionButton(inputId = "button_1",
+             label = "Increment count 1")
+
+# -- button 2
+actionButton(inputId = "button_2",
+             label = "Increment count 2")
+  
+```
+
+With the corresponding listeners on server side:
+
+```{r}
+#| eval: false
+
+# -- button 1
+observeEvent(input$button_1, 
+             ...)
+
+# -- button 2
+observeEvent(input$button_2, 
+             ...)
+
+```
+
+The problem is that this will create as many listeners as there are rows in the table, all of them with the same code except they will target a different row in the `data.frame`.
+
+And if several actions are implemented on the same card (maybe update the element, delete it, show details, etc...) then this will end up in a huge amount of listeners.
+
+## Optimized approach
+
+When we think about the inputs that will be created by the first approach, the only difference between them is that `input_1` will drive the action on the first object of the `data.frame`, `input_2` on the second and so on.\
+An intuitive way to solve this is to target an architecture with a single input access that would accept different values to target specific elements of the table.
+
+But how can we keep the buttons with unique `inputId` values on ui side and a single entry in the `input` list on server side?
+
+One solution for this is to create multiple button components and modify their behavior to hit a single input entry with different values using the `onclick` attribute.
+
+```{r}
+#| eval: false
+
+# -- button 1
+actionButton(inputId = "row_1",
+             label = "Increment count 1",
+             onclick = 'Shiny.setInputValue(\"increment\", this.id, {priority: \"event\"})')
+
+# -- button 2
+actionButton(inputId = "row_2",
+             label = "Increment count 2",
+             onclick = 'Shiny.setInputValue(\"increment\", this.id, {priority: \"event\"})')
+
+```
+
+The server side is improved with a single input listener:
+
+```{r}
+#| eval: false
+
+# -- single listener
+observeEvent(input$increment, {
+  
+  # -- get id from input value
+  id <- unlist(strsplit(input$increment, "_"))[2]
+  cat("Single input increment, id =", id, "\n")
+  
+  ...
+  
+})
+
+```
+
+## Heterogeneous input values
+
+As long as you somehow decode the input value to determine which element is targeted by the action, one could imagine that this single access point could actually manage not only several elements, but also several actions.
+
+Well it's possible to tune the `inputId` of the button to say *encode* a message:
+
+```{r}
+#| eval: false
+
+# -- button 1
+actionButton(inputId = "increment_1",
+             label = "Increment count 1",
+             onclick = 'Shiny.setInputValue(\"action\", this.id, {priority: \"event\"})')
+
+# -- button 2
+actionButton(inputId = "display_2",
+             label = "Show count 2",
+             onclick = 'Shiny.setInputValue(\"action\", this.id, {priority: \"event\"})')
+
+```
+
+And *decode* the message from the input value on server side:
+
+```{r}
+#| eval: false
+
+# -- listener
+observeEvent(input$action, {
+  
+  # -- get values from input
+  action <- unlist(strsplit(input$action, "_"))
+  names(action) <- c("type", "id")
+  
+  # -- action
+  if(action['type'] == "increment")
+    ...
+  else
+    ...
+  
+})
+```
+
+## Conclusion
+
+This is a very powerful approach when it comes to dealing with a big amount of dynamically generated inputs. Of course here, and for demonstration purpose, the inputs where explicitly created on ui side. But it's very easy to generate those input components from server side. All you need to do is make sure they have a unique `inputId` and here the `paste` function is your friend (basically use paste to concatenate the action type with the element id to get a single input value).
+
+Note that it is also possible to tune the `setInputValue` expression with `sprintf` based expressions and even replace `this.id` by an evaluated expression.
+
+::: callout-warning
+As long as you pass an explicit message to an input, this value will be accessible from the front-end browser for example using the inspect feature. This means no critical / confidential data should be exposed here!
+
+![browser console](image/complex-instructions.png)
+:::
