@@ -13,7 +13,6 @@ book:
     - communication-to-module.qmd
     - communication-between-modules.qmd
     - ui-server.qmd
-    - wrap-ui.qmd
     - considerations-parameters-return-values.qmd
     - complex-objects.qmd
     - complex-instructions.qmd
