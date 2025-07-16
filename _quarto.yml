@@ -15,6 +15,8 @@ book:
     - ui-server.qmd
     - wrap-ui.qmd
     - considerations-parameters-return-values.qmd
+    - complex-objects.qmd
+    - complex-instructions.qmd
     - references.qmd
   page-footer:
     border: false
