@@ -84,6 +84,7 @@ selectInput(inputId = "filter",
 ... that are updated on server side:
 
 ```{r}
+#| eval: false
 
 updateSelectInput(inputId = "filter_2",
                   choices = unique(df$category))
