@@ -1,15 +1,19 @@
 # Shiny communication manifest
 
-Up to now and to keep things simple for someone who would discover and explore the module communication topic, communication objects - i.e. server function parameters and return value - have been kept as single reactive objects.
+The goal of this chapter is to bring together all the concepts covered in the previous chapters and build a takeaway synthesis that can be used as a reliable basis to build strong communication architecture within Shiny apps.
 
-Explain the two communication streams:
+## Two communication streams
 
--   input / output dedicated to ui - server communication
+There are two communication streams in a modular Shiny app:
+
+-   the input / output stream, dedicated to server \<\> ui communication,
+
+-   the function parameter / return value stream, dedicated to server \<\> server communication.
+
+It is critical to remember that both streams are targeting different activities and they most likely should never cross each other.
+
+## Module encapsulation
 
 -   server / ui should stick to the same level (same context) and cascade top & bottom (no cross dependency)
 
--   parameters & return values dedicated to server - server communications
-
 -   where the code is located in the folder structure does not matter! could be horizontal or recursive folders
-
-It is critical to remember that both streams are targeting different activities and they most likely should never cross each other.
