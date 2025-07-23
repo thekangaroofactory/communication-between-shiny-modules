@@ -1,8 +1,8 @@
 # Shiny communication manifest
 
-The goal of this chapter is to bring together all the concepts covered in the previous chapters and build a takeaway synthesis that can be used as a reliable basis to build strong communication architecture within Shiny apps.
+The goal of this chapter is to bring together all the concepts covered in the previous ones and get a takeaway synthesis that can be used as a reliable basis to build strong communication architecture within Shiny apps.
 
-## Two communication streams
+## Communication streams
 
 There are two communication streams in a modular Shiny app:
 
@@ -10,10 +10,28 @@ There are two communication streams in a modular Shiny app:
 
 -   the function parameter / return value stream, dedicated to server \<\> server communication.
 
-It is critical to remember that both streams are targeting different activities and they most likely should never cross each other.
+It is critical to remember that both streams are targeting different activities and they most likely should never cross each other[^communication-manifest-1].
+
+[^communication-manifest-1]: Except for when input values are passed to other server levels through parameters and / or return values.
 
 ## Module encapsulation
 
--   server / ui should stick to the same level (same context) and cascade top & bottom (no cross dependency)
+Encapsulation is a key concept to keep a clear and functional architecture, especially as an application is growing and getting more complex.
 
--   where the code is located in the folder structure does not matter! could be horizontal or recursive folders
+-   server / ui communication should stick to the same level (namespace)\
+    *observe inputs at same level as where they are created*
+
+-   data (including input values from the parent) should be passed to a child through the server function parameters
+
+-   data (including input values from a child) should be passed to a parent through the server function return value
+
+-   both function parameters and return value can handle list objects to carry more complex information
+
+-   where the code is located in the folder structure does not matter!\
+    *(could be horizontal or recursive folders)*
+
+## Other best practices
+
+-   static ui should be kept on ui side to reduce code in server functions
+
+-   server function parameters should be tested against reactivity

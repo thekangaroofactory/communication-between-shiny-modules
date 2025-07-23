@@ -16,6 +16,7 @@ book:
     - considerations-parameters-return-values.qmd
     - complex-objects.qmd
     - complex-instructions.qmd
+    - communication-manifest.qmd
     - references.qmd
   page-footer:
     border: false
