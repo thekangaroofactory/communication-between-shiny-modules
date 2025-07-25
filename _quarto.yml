@@ -17,6 +17,7 @@ book:
     - complex-objects.qmd
     - complex-instructions.qmd
     - communication-manifest.qmd
+    - conclusion.qmd
     - references.qmd
   page-footer:
     border: false
