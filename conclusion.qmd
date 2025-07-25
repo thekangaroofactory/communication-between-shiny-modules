@@ -1,0 +1,37 @@
+---
+bibliography: references.bib
+---
+
+# Conclusion {.unnumbered}
+
+First of all, congratulations on making it this far!
+
+Through this book, we have explored how Shiny communication between modules is deeply linked to both ui / server and parent / child communication.
+
+The ui / server communication process relies on the very key namespace notion that is critical to understand if you want to master Shiny communication. I definitely encourage you to explore how the Shiny `NS` function works, as well as the `input` / `output` objects.
+
+The parent / child notion helps building best practices that are valid no matter how many or where[^conclusion-1] the modules are located in the architecture. We've seen that nested modules are in fact just children of *something* in the same way modules are children of the main app server.\
+Encapsulation is the key concept to always keep in mind to secure modular architecture. Server function parameters and return value are the basis to ensure this encapsulation and can handle very complex values to fine tune the information sent to or received from a specific module.
+
+[^conclusion-1]: By where I mean how deep.
+
+If you took a dive into the associated use cases & GitHub folders, you've seen that those key concepts could be apprehended through not so complex examples.\
+I encourage you to modify or adapt them to use cases you have in mind to check how the different notions we've been through help solving the communication challenges.
+
+More broadly, it is recommended to not only think about the app architecture, but also build a quick prototype / proof of concept to demonstrate how communication will be handled in your projects as changing the strategy along the way can be very costly in term of time.
+
+Remember that architecture thinking is key to build and maintain applications as they evolve in time and get more complexity by adding new features.\
+At least, these new features should find their place inside the existing architecture and communication scheme for minor version updates[^conclusion-2].\
+A good practice here is to formally draw a communication schema that you can save along with the project specifications so that you can rely on it when you come back months or sometimes years later to improve the application.
+
+[^conclusion-2]: While it is often necessary to update or even rethink the application architecture when building a major version.
+
+As you reach the end of this book, I would like to thank you for reading it and for supporting my work.\
+Fell free to star & watch the linked GitHub repositories to get updated whenever I will make revisions.\
+Your feedback will be greatly appreciated - in particular don't hesitate to share the use cases you'd like to see covered in future versions.\
+
+::: callout-tip
+This book references a GitHub repository that contains examples to illustrate the different chapters and sections.
+
+The repository is accessible here: [template-r-shiny-communication](https://github.com/thekangaroofactory/template-r-shiny-communication)
+:::
