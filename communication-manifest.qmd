@@ -32,6 +32,7 @@ Encapsulation is a key concept to keep a clear and functional architecture, espe
 
 ## Other best practices
 
--   static ui should be kept on ui side to reduce code in server functions
+-   static ui should be kept on ui side to reduce code in server functions\
+    *(use of update\*Input functions helps for that)*
 
 -   server function parameters should be tested against reactivity
