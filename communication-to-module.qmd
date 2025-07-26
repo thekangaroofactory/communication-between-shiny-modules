@@ -48,7 +48,7 @@ Outputs can't be considered as communication objects to the module as they are m
 ## Parameters
 
 Just as module server functions have a return value like any other function, they can take parameters.\
-Remember this is described in the `moduleServer` documentation [@scalingModuleServer]:
+Remember this is described in the `moduleServer` documentation [@moduleServerDocumentation]:
 
 > If you want to pass extra parameters to the module's server logic,\
 > you can add them to your function.
