@@ -52,7 +52,7 @@ The `reactiveVal` has been updated / overwritten *everywhere* inside the app[^co
 
 [^considerations-parameters-return-values-1]: This would not happen with a standard non-reactive parameter since you modify it within a function's context
 
-There is a good article dealing with reactive object's update: [@modifyReactive]\
+There is a good article dealing with reactive object's update: [@updateReactive]\
 Basically, `reactiveVal` as well as `reactiveValues` objects can be updated anywhere in the app.\
 On the opposite, `reactive` or `eventReactive` objects won't let you update them in a different module / server:
 
