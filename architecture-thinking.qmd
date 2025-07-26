@@ -2,7 +2,7 @@
 bibliography: references.bib
 ---
 
-# Architecture Thinking {.unnumbered}
+# Architecture Thinking
 
 While most of this book is dedicated to how things technically work, one key part of mastering Shiny communication between modules relies on architecture thinking.
 
