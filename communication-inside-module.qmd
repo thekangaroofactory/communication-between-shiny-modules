@@ -78,7 +78,7 @@ It is literally same as using `NS(id, "numeric")` in our case.
 
 Again, the `NS` function can be explored to discover that both module id and input id will be merged into a single character string using the `paste` function with its `sep` equals to `ns.sep`.\
 Typing `ns.sep` to the console will output "-".\
-You can see the function reference for more details [@positNamespacedInputsoutputs] about it.
+You can see the function reference for more details [@namespacedInputsOutputs] about it.
 
 So the "numeric" input that we defined in the module ui function will become "module-numeric" to the main ui that implements it. You can actually confirm this by inspecting the HTML page in your web browser.
 
