@@ -1,0 +1,52 @@
+---
+bibliography: references.bib
+---
+
+# Architecture Thinking {.unnumbered}
+
+While most of this book is dedicated to how things technically work, one key part of mastering Shiny communication between modules relies on architecture thinking.
+
+## Global communication schema
+
+As we saw previously, communication between the ui and the server(s) and communication between servers are different streams used for different purposes. A good method to make things clear when you start a project is to draft a global schema and *mentally* check how the information flow will travel from a component to another.
+
+![Global architecture schema](image/architecture-thinking-global.png)
+
+This way, you can evaluate the best configuration whether maybe some tasks should be delegated to a sub / nested module or not. I would recommend here to do a review of the feature / tasks you want to implement in your application, where they should be handled, on which information / data they rely, and where those data should come from.\
+When you schema validates the full review, then you have a strong basis to start coding.
+
+Remember that the objective is not only to make things work but also to build a smart design pattern that can support evolution and new features. I believe this point is particularly critical when it comes to Agile development where projects usually start with a few features and will grow as we iterate.
+
+## Local communication schema
+
+In addition to the global architecture schema, I would recommend to spend some time at the module level (local) to specify how each component will:
+
+-   receive information from the ui using Inputs
+
+-   send information to the ui using outputs
+
+-   receive information / data through the server function parameters
+
+-   send information / data through the server function return value
+
+![Local architecture schema](image/architecture-thinking-local.png)
+
+This is particularly important for modules handling complex tasks or those that will share their outputs (in the sens of data / information) across different modules or places in the UI.
+
+## Data driven modules vs feature driven modules
+
+There is an additional topic that I believe is critical when it comes to dealing with bigger / more complex applications.
+
+I have realized over time that I pretty much always intuitively think of a module as a data driven module.\
+By data driven module, I mean that the purpose of a specific module is to handle a specific type of data: maybe do the read / write operations and provide methods contextual to these data (filter, select, etc...).
+
+But as my apps were growing and getting more complex - so involving more data, features but also information flows - I started to face communication challenges between the different modules mostly because they handled both say the data management part and the feature / task as seen from the UI (hence from the user).
+
+The main challenge here is that coding the data / information flow and coding the user interactions handling are two different things that need to the linked to each other.
+
+This is when feature driven modules comes in action.\
+Shiny applications very often relies on tab based components that group similar tasks a user would like to perform and having a dedicated module to handle a specific group of tasks can avoid mixing both the data and user streams.
+
+In this architecture, data driven modules would handle all the data management tasks (and this is the reason why I work on the {[kitems](https://github.com/thekangaroofactory/kitems)} package) while feature driven module would consume these data to answer the user interactions.
+
+![Data and feature driven modules](image/architecture-thinking-modules.png)

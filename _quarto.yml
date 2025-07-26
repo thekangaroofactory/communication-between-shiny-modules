@@ -16,6 +16,7 @@ book:
     - considerations-parameters-return-values.qmd
     - complex-objects.qmd
     - complex-instructions.qmd
+    - architecture-thinking.qmd
     - communication-manifest.qmd
     - conclusion.qmd
     - references.qmd
