@@ -74,7 +74,7 @@ Running the app will output this to the console:
 
 Let's dive into the sequence of events.\
 When the numeric input object is created, it's `id` is valuated using a `ns` function defined as `NS(id)` that you will find in many documentations & articles. This `ns` is just a wrapper to avoid copying the id parameter of the module server function to each and every inputs defined in it.\
-It is literaly same as using `NS(id, "numeric")` in our case.
+It is literally same as using `NS(id, "numeric")` in our case.
 
 Again, the `NS` function can be explored to discover that both module id and input id will be merged into a single character string using the `paste` function with its `sep` equals to `ns.sep`.\
 Typing `ns.sep` to the console will output "-".\
@@ -97,7 +97,7 @@ From inside the module, this process is quite transparent since you can access t
 
 I believe this is one of the main reasons why Shiny module communication feels super complicated while it's actually quite simple.
 
-The key here is to keep in mind that this wrapping / unwrapping process does take place in both ways but in different places and through different means. Wrapping is explicitely done at each input's level using the `NS` function while unwrapping is implicitly performed at the `moduleServer` function level.
+The key here is to keep in mind that this wrapping / unwrapping process does take place in both ways but in different places and through different means. Wrapping is explicitly done at each input's level using the `NS` function while unwrapping is implicitly performed at the `moduleServer` function level.
 
 ## Module outputs
 
