@@ -44,7 +44,7 @@ These limitations around inputs & outputs demonstrates the need for another appr
 A critical notion that is on one side somehow obvious and well documented but on the other side not so common among Shiny module tutorials & articles is the return value.
 
 Remember, we used the `moduleServer` function to launch the module server.\
-A quick overview over the help page (`?moduleServer`) of the function shows a Value section:
+A quick overview over the help page (`?moduleServer` / [@moduleServerDocumentation]) of the function shows a Value section:
 
 > **Value**
 >
