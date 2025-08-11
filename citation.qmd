@@ -1,0 +1,7 @@
+---
+title: "xxxx and yyyy"
+citation:
+  type: book
+  container-title: "Proceedings of the annual conference of the Society for Research"
+  url: https://example.com/summarizing-output
+---
