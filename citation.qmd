@@ -9,7 +9,7 @@ author:
     affiliation: Spacely Sprockets
     affiliation-url: https://example.com/spacelysprokets
 citation: true
-bibliography: biblio.bib
+bibliography: references.bib
 ---
 
 This is a test article.
