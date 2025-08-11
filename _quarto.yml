@@ -20,7 +20,6 @@ book:
     - communication-manifest.qmd
     - conclusion.qmd
     - references.qmd
-    - citation.qmd
   page-footer:
     border: false
     left: "Copyright 2025, Philippe Peret" 
