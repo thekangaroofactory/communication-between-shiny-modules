@@ -6,7 +6,7 @@ book:
   author: "Philippe Peret"
   date: today
   chapters:
-    - index.qmd
+    - preface.qmd
     - intro.qmd
     - communication-inside-module.qmd
     - communication-from-module.qmd
