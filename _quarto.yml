@@ -8,18 +8,26 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
-    - communication-inside-module.qmd
-    - communication-from-module.qmd
-    - communication-to-module.qmd
-    - communication-between-modules.qmd
-    - ui-server.qmd
-    - considerations-parameters-return-values.qmd
-    - complex-objects.qmd
-    - complex-instructions.qmd
-    - architecture-thinking.qmd
-    - communication-manifest.qmd
+    - part: "Communication Foundations"
+      chapters: 
+      - communication-inside-module.qmd
+      - communication-from-module.qmd
+      - communication-to-module.qmd
+      - communication-between-modules.qmd
+    - part: "Extending beyond basics"
+      chapters: 
+      - ui-server.qmd
+      - considerations-parameters-return-values.qmd
+      - complex-objects.qmd
+      - complex-instructions.qmd
+    - part: "Architecture & Best Practices"
+      chapters: 
+      - architecture-thinking.qmd
+      - communication-manifest.qmd
     - conclusion.qmd
     - references.qmd
+  appendices:
+    - resources.qmd
   page-footer:
     border: false
     left: "Copyright 2025, Philippe Peret" 
