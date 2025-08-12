@@ -5,6 +5,8 @@ book:
   title: "Mastering Communication Between Shiny Modules"
   author: "Philippe Peret"
   date: today
+  sidebar: 
+    footer: "</br>[![](img/cc-icon.svg){height=42px}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
   chapters:
     - index.qmd
     - intro.qmd
