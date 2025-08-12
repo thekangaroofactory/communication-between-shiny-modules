@@ -15,3 +15,9 @@ Some of this challenges could be solved by reading existing documentation or Q&A
 This guide is meant to not only be the foundation of {kitems} module server communication, but to extend beyond this framework and be used in any complex Shiny application.
 
 I hope it will help you put all the pieces together, and help us all make smart choices.
+
+------------------------------------------------------------------------
+
+Please cite this work as:
+
+Peret, Philippe. "Mastering Communication Between Shiny Modules". <https://thekangaroofactory.github.io/communication-between-shiny-modules/>
