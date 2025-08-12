@@ -6,7 +6,7 @@ book:
   author: "Philippe Peret"
   date: today
   sidebar: 
-    footer: "</br>[![](img/by-nc-sa.png){height=42px}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
+    footer: "</br>[![](image/by-nc-sa.png){height=42px}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
   chapters:
     - index.qmd
     - intro.qmd
