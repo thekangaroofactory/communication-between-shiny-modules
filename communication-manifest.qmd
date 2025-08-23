@@ -36,3 +36,9 @@ Encapsulation is a key concept to keep a clear and functional architecture, espe
     *(use of update\*Input functions helps for that)*
 
 -   server function parameters should be tested against reactivity
+
+## Wrap-up module
+
+::: callout-tip
+There is a specific folder in the GitHub repository attached to this book where to find a wrap-up template with both parameters & return value : [wrapup-module](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/wrapup-module)
+:::

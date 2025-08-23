@@ -18,7 +18,7 @@ Each folder inside the GitHub repository is attached to a specific chapter in th
 
 -   [module-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-input)
 
--    [module-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-output)
+-   [module-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-output)
 
 #### Communication from a module (to its parent)
 
@@ -62,8 +62,8 @@ Each folder inside the GitHub repository is attached to a specific chapter in th
 
 -   [complex-instructions](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/complex-instructions)
 
-### Architecture & Best Practices \<\< a priori rien
+### Architecture & Best Practices
 
-#### Wrapup
+#### Shiny Communication Manifest
 
--   [wrapup-module](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/wrapup-module) ?? – cité nulle part ??
+-   [wrapup-module](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/wrapup-module)
