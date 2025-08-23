@@ -78,3 +78,16 @@ module_1_server(id = "module", trigger = proxy)
 ```
 
 The exact same behavior exists with reactive return values and it's critical to always take this notion into account when you create your app module architecture and the inner reactive objects if they are meant to be part of the communication process.
+
+::: callout-note
+You may have heard or read about an approach that is actually based on this behavior.
+
+This approach is called "stratégie du petit r" (it just means *the small/little r strategy*) and it is based on a `r` object that is declared at the top level of your application as a `reactiveVal` or `reactiveValues` .
+
+This `r` object is then passed to the module server function as a parameter that will be updated inside the module server... and accessible from the outside of it, and basically anywhere it's been passed to.
+
+I have used this approach a lot in the past, but I realized that it makes everything very complex as an application is growing. Adding values to the `r` object in different modules makes it quite difficult to document and keep organized. Since the values can be updated anywhere... it's "easy" to implement lazy approaches in which same values are managed and updated in different modules.\
+At some point, it's difficult to maintain the consistency of the application architecture.
+
+Also – and this is to me the main reason why I'm not using this approach anymore – I feel like this is a very hacky option as a function should return it's value from... the return value, not the parameter!
+:::
