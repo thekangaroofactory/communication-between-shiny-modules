@@ -16,7 +16,7 @@ Same applies to communication between modules.
 As mentioned earlier, there are specific use cases when a module would call another module.\
 The typical use case for this implementation is when you want to delegate some task from the module to a sub module because your module server itself is growing and requires some architecture. Another great example is when a specific task / feature is not always needed. Maybe something not all users will be allowed to use or require. In this case it's good practice to avoid the creation of reactives and observers if they will never be reached[^communication-between-modules-2].
 
-[^communication-between-modules-2]: Input entries are created only when their ui is implemented.
+[^communication-between-modules-2]: Input entries are created only when their UI is implemented.
 
 Maybe the term *nested* is not the best because it creates some confusion over the simple main server / module server pattern. It somehow feels like it's going to be different and many (including myself) starts their journey into the module world with a biased interpretation in mind.
 
@@ -65,7 +65,7 @@ sub_module_UI <- function(id) {
 
 The key notion to understand here is that as long as you pass the *'correct'* `id` value to the function, it could be used at any level (typically the main server) to implement the input. But as long as you made a choice to implement a sub module level, you should stick to only create parent-child **dependencies**.
 
-This means the sub module ui function should always be called from its parent - no matter if the parent is the main server or another module (this is what encapsulation actually means).
+This means the sub module UI function should always be called from its parent - no matter if the parent is the main server or another module (this is what encapsulation actually means).
 
 ```{r}
 #| eval: false
@@ -80,14 +80,14 @@ module_UI <- function(id) {
                  label = "Module server input",
                  value = 0),
 
-    # -- sub module ui
+    # -- sub module UI
     sub_module_UI(NS(id, "submodule")))
 
 }
 
 ```
 
-To ensure this encapsulation principle, the `sub_module_UI` function is called from the `module_UI` function. In most cases, you will add more content together with the ui coming from the sub module - here we add a numeric input - but you may also just create a wrapper function around the sub module ui function.
+To ensure this encapsulation principle, the `sub_module_UI` function is called from the `module_UI` function. In most cases, you will add more content together with the UI coming from the sub module - here we add a numeric input - but you may also just create a wrapper function around the sub module UI function.
 
 ::: callout-tip
 Have you ever played around with the `NS()` function?
@@ -106,10 +106,10 @@ The resulting UI architecture looks like this:
 
 ![Nested module UI](image/nested-module-ui.png)
 
-You may ask yourself why I put the modules ui functions inside dotted boxes.\
-Well, they are not *really* executed like that nor at different levels since they are only called from the main app ui as a chain[^communication-between-modules-4]! Only the namespace assignment makes their input visible to a certain module / level in the architecture. This ensures that a given module can be used at any level of the hierarchy (we could imagine of a module being used in different branch at different levels for example).
+You may ask yourself why I put the modules UI functions inside dotted boxes.\
+Well, they are not *really* executed like that nor at different levels since they are only called from the main app UI as a chain[^communication-between-modules-4]! Only the namespace assignment makes their input visible to a certain module / level in the architecture. This ensures that a given module can be used at any level of the hierarchy (we could imagine of a module being used in different branch at different levels for example).
 
-[^communication-between-modules-4]: So it's more main app ui \> module ui \> sub module ui
+[^communication-between-modules-4]: So it's more main app UI \> module UI \> sub module UI
 
 All of the three servers have a listener that prints the `names` of the input list:
 
@@ -123,18 +123,18 @@ All of the three servers have a listener that prints the `names` of the input li
 See how everything is really a matter of context / scope and parent-child relationship!\
 Basically, if you say zoom on the module and sub module levels, you get exactly the same result as the one we saw in the module communication chapters.
 
-When building an architecture for your apps, it's key to keep in mind how the information flow goes through the different layers (and between the ui / server sides):
+When building an architecture for your apps, it's key to keep in mind how the information flow goes through the different layers (and between the UI / server sides):
 
 ![Nested module input communication process](image/nested-module-input-communication.png)
 
-While the ui representation of an input goes up through the ui functions, its value on server side goes down from a level to the next one and is directly[^communication-between-modules-5] accessible at the right level thanks to the namespace mechanism.
+While the UI representation of an input goes up through the UI functions, its value on server side goes down from a level to the next one and is directly[^communication-between-modules-5] accessible at the right level thanks to the namespace mechanism.
 
 [^communication-between-modules-5]: By *directly*, I mean through an `input$foo` instruction
 
 ### Outputs
 
 Here we will just implement same basic example as for the module communication to see how things go.\
-Remember that outputs are meant to communicate / render information from the server side to the ui side up to the main app level (what the users see).
+Remember that outputs are meant to communicate / render information from the server side to the UI side up to the main app level (what the users see).
 
 ::: callout-tip
 The [module-nested-output](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-output) folder of the GitHub repository linked to this book implements a basic use case of a server / module / nested module implementation to support this section.
@@ -144,7 +144,7 @@ Basically it has the same architecture as the previous section's example except 
 
 They implement a simple text output[^communication-between-modules-6] :
 
-[^communication-between-modules-6]: Note that in real life, this `renderText` would involve some dynamic content (or be on ui side)
+[^communication-between-modules-6]: Note that in real life, this `renderText` would involve some dynamic content (or be on UI side)
 
 ```{r}
 #| eval: false
@@ -163,7 +163,7 @@ cat("Outputs seen from the main server: ", paste(names(outs), collapse = " / ", 
 
 ```
 
-The output from the sub-module server is rendered inside the `sub_module_UI` function while the one from the module server is rendered in the `module_UI` function along with a call to the sub-module ui function[^communication-between-modules-7].
+The output from the sub-module server is rendered inside the `sub_module_UI` function while the one from the module server is rendered in the `module_UI` function along with a call to the sub-module UI function[^communication-between-modules-7].
 
 [^communication-between-modules-7]: Same approach as for the inputs
 
@@ -184,7 +184,7 @@ Let's recap all this in a communication schema:
 
 ![Nested module output communication](image/nested-module-output-communication.png)
 
-Outputs are defined on the server side, then consumed on the ui side **at the same level**, then go up through the ui functions just as the inputs did[^communication-between-modules-9].
+Outputs are defined on the server side, then consumed on the UI side **at the same level**, then go up through the UI functions just as the inputs did[^communication-between-modules-9].
 
 [^communication-between-modules-9]: Because they are basically HTML at this stage
 
@@ -202,7 +202,7 @@ The idea here is to observe how an input value can be passed on from the main se
 
 [^communication-between-modules-10]: Use-cases are voluntarily very simple to avoid mixing notions as they are meant to support a specific section of the book.
 
-This time the main app is just composed of a `numericInput` on ui side, and the server is listening to its value:
+This time the main app is just composed of a `numericInput` on UI side, and the server is listening to its value:
 
 ```{r}
 #| eval: false
@@ -292,7 +292,7 @@ Remember that module server functions are like any other function in the sense t
 The [module-nested-return-value](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-nested-return-value) folder of the GitHub repository linked to this book implements the use case of a server / module / nested module implementation to support this section.
 :::
 
-The use case here is very simple. The goal is just to pass on some return value from the sub-module up to the main server. There's no ui involved except at the main level to display the value and demonstrate the reactive process.
+The use case here is very simple. The goal is just to pass on some return value from the sub-module up to the main server. There's no UI involved except at the main level to display the value and demonstrate the reactive process.
 
 Let's start with the sub-module server to follow the flow of information:
 
@@ -332,7 +332,7 @@ There's a bit of a nonsense here because as long as you don't do anything with `
 
 I'm just writing these two lines to make things explicit, assuming that in most cases, there will be other instructions in the module functions, and most probably some computation in between the call to the sub-module server function and the return instruction of the module server function.
 
-The main server function calls in turn the module server function and reuses its reactive return value to build an output for the ui to display:
+The main server function calls in turn the module server function and reuses its reactive return value to build an output for the UI to display:
 
 ```{r}
 #| eval: false
@@ -346,7 +346,7 @@ output$box <- renderUI(value_box(title = "From main server",
 
 ```
 
-When you launch that app, you will get a box on the ui which content value will be updated on every second, showing that the value defined at the sub-module server level is passed up to the main server level through the reactive return values.
+When you launch that app, you will get a box on the UI which content value will be updated on every second, showing that the value defined at the sub-module server level is passed up to the main server level through the reactive return values.
 
 The communication schema is quite simple here:
 
@@ -373,14 +373,14 @@ We've seen how to communication from the main server to a module server and back
 
 ### Inputs
 
-We've seen how inputs are dedicated to ui / server communication and why hey should stick to it.\
+We've seen how inputs are dedicated to UI / server communication and why hey should stick to it.\
 This section will just describe what we can observe within each scope to set the context and make sure you get a strong understanding of the workflow.
 
 ::: callout-tip
 The [module-siblings-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-siblings-input) folder of the GitHub repository linked to this book implements the use case of a server having two modules to support this section.
 :::
 
-So basically the main server function calls two module server functions and both modules have a ui function implementing a specific input.
+So basically the main server function calls two module server functions and both modules have a UI function implementing a specific input.
 
 When you start the app, the entries of the input list are displayed to the console for each server:
 
@@ -391,7 +391,7 @@ When you start the app, the entries of the input list are displayed to the conso
 
 Basically, everything here works just like for when we had only one module (see xref <!--# xref --> chapter for detailed decription).
 
-Each module just knows about its own scope, so there is no way to directly communicate an input from a module to another one, which is great since as we saw, an input is meant to communicate from the ui to the specific module server. So if you need to pass an input to module 1 or module 2, then this input should be in priority defined in the corresponding module.
+Each module just knows about its own scope, so there is no way to directly communicate an input from a module to another one, which is great since as we saw, an input is meant to communicate from the UI to the specific module server. So if you need to pass an input to module 1 or module 2, then this input should be in priority defined in the corresponding module.
 
 That being said, in specific cases, you could need to pass an input *value* from one module to another.\
 But then it's just like a return value + function parameter 'combo' that we will see in a later section (see <!--# xref -->).
@@ -426,7 +426,7 @@ module_2_server(id = "module2")
 
 Since the print instruction is run only once at the module start-up and module1 is launched first, it explains that - *at the moment when the expression is evaluated in module1* - a single output is declared.
 
-What I'm trying to demonstrate here is that - from say a *technical* point of view - both outputs could just be used inside the other module's ui function[^communication-between-modules-12]. But that would immediately create confusions as well as cross dependencies that are very difficult to manage.
+What I'm trying to demonstrate here is that - from say a *technical* point of view - both outputs could just be used inside the other module's UI function[^communication-between-modules-12]. But that would immediately create confusions as well as cross dependencies that are very difficult to manage.
 
 [^communication-between-modules-12]: Or even inside the other module server function
 

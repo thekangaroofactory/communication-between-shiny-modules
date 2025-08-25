@@ -1,6 +1,6 @@
 # Communication inside module
 
-Although this is the easy part of the topic as the communication inside a module is not different from the communication inside a standard server / ui Shiny app, it's important to understand how it actually works to extend it to more complex cases in a second step.
+Although this is the easy part of the topic as the communication inside a module is not different from the communication inside a standard server / UI Shiny app, it's important to understand how it actually works to extend it to more complex cases in a second step.
 
 Not different... well actually it is not different in the code that you will write to manage inputs / outputs but there is a major difference with the namespace concept and it's important to understand the details of it to be able to handle more complex communications and architectures.
 
@@ -36,7 +36,7 @@ This means that, as long as you run it within a reactive context, you can access
 The [module-input](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-input) folder of the GitHub repository linked to this book implements a very simple example of a module that contains a single input.
 :::
 
-The input is defined in the module ui function:
+The input is defined in the module UI function:
 
 ```{r}
 #| eval: false
@@ -80,7 +80,7 @@ Again, the `NS` function can be explored to discover that both module id and inp
 Typing `ns.sep` to the console will output "-".\
 You can see the function reference for more details [@namespacedInputsOutputs] about it.
 
-So the "numeric" input that we defined in the module ui function will become "module-numeric" to the main ui that implements it. You can actually confirm this by inspecting the HTML page in your web browser.
+So the "numeric" input that we defined in the module UI function will become "module-numeric" to the main UI that implements it. You can actually confirm this by inspecting the HTML page in your web browser.
 
 ``` html
 <input id="module-numeric" type="number" class="shiny-input-number form-control shiny-bound-input" value="0">

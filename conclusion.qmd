@@ -6,9 +6,9 @@ bibliography: references.bib
 
 First of all, congratulations on making it this far!
 
-Through this book, we have explored how Shiny communication between modules is deeply linked to both ui / server and parent / child communication.
+Through this book, we have explored how Shiny communication between modules is deeply linked to both UI / server and parent / child communication.
 
-The ui / server communication process relies on the very key namespace notion that is critical to understand if you want to master Shiny communication. I definitely encourage you to explore how the Shiny `NS` function works, as well as the `input` / `output` objects.
+The UI / server communication process relies on the very key namespace notion that is critical to understand if you want to master Shiny communication. I definitely encourage you to explore how the Shiny `NS` function works, as well as the `input` / `output` objects.
 
 The parent / child notion helps building best practices that are valid no matter how many or where[^conclusion-1] the modules are located in the architecture. We've seen that nested modules are in fact just children of *something* in the same way modules are children of the main app server.\
 Encapsulation is the key concept to always keep in mind to secure modular architecture. Server function parameters and return value are the basis to ensure this encapsulation and can handle very complex values to fine tune the information sent to or received from a specific module.

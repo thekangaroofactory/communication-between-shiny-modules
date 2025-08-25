@@ -6,7 +6,7 @@ The goal of this chapter is to bring together all the concepts covered in the pr
 
 There are two communication streams in a modular Shiny app:
 
--   the input / output stream, dedicated to server \<\> ui communication,
+-   the input / output stream, dedicated to server \<\> UI communication,
 
 -   the function parameter / return value stream, dedicated to server \<\> server communication.
 
@@ -18,7 +18,7 @@ It is critical to remember that both streams are targeting different activities 
 
 Encapsulation is a key concept to keep a clear and functional architecture, especially as an application is growing and getting more complex.
 
--   server / ui communication should stick to the same level (namespace)\
+-   server / UI communication should stick to the same level (namespace)\
     *observe inputs at same level as where they are created*
 
 -   data (including input values from the parent) should be passed to a child through the server function parameters
@@ -32,7 +32,7 @@ Encapsulation is a key concept to keep a clear and functional architecture, espe
 
 ## Other best practices
 
--   static ui should be kept on ui side to reduce code in server functions\
+-   static UI should be kept on UI side to reduce code in server functions\
     *(use of update\*Input functions helps for that)*
 
 -   server function parameters should be tested against reactivity

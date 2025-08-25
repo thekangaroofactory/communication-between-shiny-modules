@@ -8,7 +8,7 @@ While most of this book is dedicated to how things technically work, one key par
 
 ## Global communication schema
 
-As we saw previously, communication between the ui and the server(s) and communication between servers are different streams used for different purposes. A good method to make things clear when you start a project is to draft a global schema and *mentally* check how the information flow will travel from a component to another.
+As we saw previously, communication between the UI and the server(s) and communication between servers are different streams used for different purposes. A good method to make things clear when you start a project is to draft a global schema and *mentally* check how the information flow will travel from a component to another.
 
 ![Global architecture schema](image/architecture-thinking-global.png)
 
@@ -21,9 +21,9 @@ Remember that the objective is not only to make things work but also to build a 
 
 In addition to the global architecture schema, I would recommend to spend some time at the module level (local) to specify how each component will:
 
--   receive information from the ui using Inputs
+-   receive information from the UI using Inputs
 
--   send information to the ui using outputs
+-   send information to the UI using outputs
 
 -   receive information / data through the server function parameters
 

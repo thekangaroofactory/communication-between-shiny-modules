@@ -1,6 +1,6 @@
 # UI vs Server sides
 
-One point we never mentioned is the relationship between the ui and the server sides when it comes to creating HTML components and in particular input objects.
+One point we never mentioned is the relationship between the UI and the server sides when it comes to creating HTML components and in particular input objects.
 
 While this may look unrelated to the communication topic, it actually is part of how *deep* the communication workflow goes and has a critical impact on the clarity of the architecture.
 
@@ -9,7 +9,7 @@ The [ui-server](https://github.com/thekangaroofactory/template-r-shiny-communica
 :::
 
 Let's take an example.\
-Say that you need a button to trigger an action on the main server side, and this button is always displayed in the ui.
+Say that you need a button to trigger an action on the main server side, and this button is always displayed in the UI.
 
 ```{r}
 #| eval: false
@@ -19,7 +19,7 @@ actionButton(inputId = "btn",
 
 ```
 
-Well this is a *static* use case when the parameters of the button (its `id` and `label` here) will be set once for all and never change. This will naturally be implemented on the ui side and the serve will listen to `input$btn` to trigger the expected action.
+Well this is a *static* use case when the parameters of the button (its `id` and `label` here) will be set once for all and never change. This will naturally be implemented on the UI side and the serve will listen to `input$btn` to trigger the expected action.
 
 Now say that you want a `selectInput` to provide a list of choices based on some `data` object.
 
@@ -32,8 +32,8 @@ selectInput(inputId = "filter",
 
 ```
 
-This will require some code evaluation based on information that are not available on the ui side[^ui-server-1].\
-Hence you will include this on the server side within an `output` that will be rendered into HTML on the ui side.
+This will require some code evaluation based on information that are not available on the UI side[^ui-server-1].\
+Hence you will include this on the server side within an `output` that will be rendered into HTML on the UI side.
 
 [^ui-server-1]: Assuming the `data` object has been created on server side
 
@@ -58,19 +58,19 @@ uiOutput("filter_ui")
 
 By doing this, we add an extra layer of complexity - not because of the input itself, but because it now involves an output / input communication workflow that makes things more complex to understand especially when it comes to analyzing a potential bug.
 
-In case the input is defined within a module, it's even harder since the output flow needs to go up through the different ui levels while the input flow is going down through the different server levels (remember namespace & scoping).
+In case the input is defined within a module, it's even harder since the output flow needs to go up through the different UI levels while the input flow is going down through the different server levels (remember namespace & scoping).
 
-From a technical point of view, inputs can be created pretty much anywhere but as we saw earlier, the key here is to keep things simple and manageable (maintainable) by creating those inputs at the right level (i.e. where the triggered action will take place) and on the right side - ui if it's *static*, server if it's *dynamic*.
+From a technical point of view, inputs can be created pretty much anywhere but as we saw earlier, the key here is to keep things simple and manageable (maintainable) by creating those inputs at the right level (i.e. where the triggered action will take place) and on the right side - UI if it's *static*, server if it's *dynamic*.
 
 ::: callout-tip
 Note that there is also one consideration to take into account.
 
-While it's totally okay to create a dynamic input inside a server function through an output that will be consumed on the ui side, it is in many cases easier[^ui-server-2] to create a *static* input on the ui side and update it *dynamically* from the server side.
+While it's totally okay to create a dynamic input inside a server function through an output that will be consumed on the UI side, it is in many cases easier[^ui-server-2] to create a *static* input on the UI side and update it *dynamically* from the server side.
 :::
 
 [^ui-server-2]: In the sense of easier to understand / follow
 
-The input is created on ui side wilt default values...
+The input is created on UI side wilt default values...
 
 ```{r}
 #| eval: false
@@ -95,7 +95,7 @@ Using this approach, it's possible to reduce the amount of code on server side a
 
 Note that the examples here do not involve reactivity but it most cases you will include the update statement inside a reactive expression and makes things pretty clear what the code block is meant to do.
 
-As a conclusion to this chapter, I would recommend to always create inputs on the ui side unless you need to put some code to compute the `inputId`, or when the input itself requires some code de decide if it's needed or not.
+As a conclusion to this chapter, I would recommend to always create inputs on the UI side unless you need to put some code to compute the `inputId`, or when the input itself requires some code de decide if it's needed or not.
 
 ::: callout-tip
 When you need to create the input on the server side, make sure you name the corresponding output in a smart way because it can easily become confusing (plus you may duplicate input / output ids[^ui-server-3]).

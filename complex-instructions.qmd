@@ -1,6 +1,6 @@
 # Building complex input instructions
 
-As we saw earlier, inputs are objects used to convey information from the ui side to the server side.\
+As we saw earlier, inputs are objects used to convey information from the UI side to the server side.\
 This process is sending single values to a server through an input component.\
 For example, an `actionButton` will send an incremental integer, a `textInput` will send a character vector of length one.
 
@@ -13,7 +13,7 @@ The [complex-instructions](https://github.com/thekangaroofactory/template-r-shin
 ## Use case
 
 Lets imagine the following use case:\
-Say you want to dynamically create multiple ui components based on a list of objects. A typical example would be cards created based on a `data.frame`. One card is created for each row of the table.\
+Say you want to dynamically create multiple UI components based on a list of objects. A typical example would be cards created based on a `data.frame`. One card is created for each row of the table.\
 Now say you want each card to contain a button for the user to interact with the given row of the `data.frame` (to update its content or anything that involves this specific row).
 
 ## First approach
@@ -22,7 +22,7 @@ The intuitive approach is to loop over the `data.frame` rows and create an `acti
 
 [^complex-instructions-1]: If not, the browser console will raise a warning.
 
-This is similar to having several inputs declared on ui side:
+This is similar to having several inputs declared on UI side:
 
 ```{r}
 #| eval: false
@@ -61,7 +61,7 @@ And if several actions are implemented on the same card (maybe update the elemen
 When we think about the inputs that will be created by the first approach, the only difference between them is that `input_1` will drive the action on the first object of the `data.frame`, `input_2` on the second and so on.\
 An intuitive way to solve this is to target an architecture with a single input access that would accept different values to target specific elements of the table.
 
-But how can we keep the buttons with unique `inputId` values on ui side and a single entry in the `input` list on server side?
+But how can we keep the buttons with unique `inputId` values on UI side and a single entry in the `input` list on server side?
 
 One solution for this is to create multiple button components and modify their behavior to hit a single input entry with different values using the `onclick` attribute.
 
@@ -142,7 +142,7 @@ observeEvent(input$action, {
 
 ## Conclusion
 
-This is a very powerful approach when it comes to dealing with a big amount of dynamically generated inputs. Of course here, and for demonstration purpose, the inputs where explicitly created on ui side. But it's very easy to generate those input components from server side. All you need to do is make sure they have a unique `inputId` and here the `paste` function is your friend (basically use paste to concatenate the action type with the element id to get a single input value).
+This is a very powerful approach when it comes to dealing with a big amount of dynamically generated inputs. Of course here, and for demonstration purpose, the inputs where explicitly created on UI side. But it's very easy to generate those input components from server side. All you need to do is make sure they have a unique `inputId` and here the `paste` function is your friend (basically use paste to concatenate the action type with the element id to get a single input value).
 
 Note that it is also possible to tune the `setInputValue` expression with `sprintf` based expressions and even replace `this.id` by an evaluated expression.
 

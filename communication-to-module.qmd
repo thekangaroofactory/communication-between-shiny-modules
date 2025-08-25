@@ -6,13 +6,13 @@ Again, this chapter will use the parent-child relationship as a basis to allow e
 
 ## Inputs
 
-The goal here in this section is - *again* - to explain why inputs should not be used to communicate to the module except for the user to directly interact with the module from the ui.
+The goal here in this section is - *again* - to explain why inputs should not be used to communicate to the module except for the user to directly interact with the module from the UI.
 
 When we create input components in the module, we have the feeling that it is specific to the module and not accessible from anywhere else but this is actually not the case. The fact is that scoping gives us this impression because of the namespace, but if you take it as a whole, it is indeed accessible.
 
 Remember in the communication inside module chapter ( <!--# cross reference -->), we saw how both the module and the main servers could see the input created from the module.
 
-Well... the input was not exactly created in the module. The module ui function implemented a `numericInput` but this function was called from... the main ui using the module `id` as a parameter. So that the creation of the input was somehow delegated to a function that was delivered with the module.
+Well... the input was not exactly created in the module. The module UI function implemented a `numericInput` but this function was called from... the main UI using the module `id` as a parameter. So that the creation of the input was somehow delegated to a function that was delivered with the module.
 
 Technically, you could get rid of this function and directly implement an input at the main app level passing the `inputId` along with the namespace of the module (its `id`) to the `NS` function and still trigger the input listener inside the module.
 
@@ -25,7 +25,7 @@ observeEvent(input$button, print("I was hit"))
 
 ```
 
-You could literally implement a button in the main app (ui or server) to trigger it:
+You could literally implement a button in the main app (UI or server) to trigger it:
 
 ```{r}
 #| eval: false
@@ -39,11 +39,11 @@ Well the reason is the same as usual: this breaks the modular architecture.
 
 By doing this, we would create dependencies between code **written** at the main app and a specific listener from inside the module. When the app becomes more complex, such approach makes it hard to follow, understand, control and maintain.
 
-In conclusion, module inputs should only be used to capture information from the ui through an interaction with the user and their implementation should be kept at the module's level (in the module server or dedicated functions delivered within the module context).
+In conclusion, module inputs should only be used to capture information from the UI through an interaction with the user and their implementation should be kept at the module's level (in the module server or dedicated functions delivered within the module context).
 
 ## Outputs
 
-Outputs can't be considered as communication objects to the module as they are meant to render reactive expressions to the app ui. They are basically communication objects from the module towards the ui through their parent(s).
+Outputs can't be considered as communication objects to the module as they are meant to render reactive expressions to the app UI. They are basically communication objects from the module towards the UI through their parent(s).
 
 ## Parameters
 
@@ -96,7 +96,7 @@ hit_module <- reactive(input$button)
 
 ```
 
-Whenever the corresponding `actionButton` will be hit by the user in the ui, this `hit_module` reactive object will be updated[^communication-to-module-1] with the integer returned by the input.
+Whenever the corresponding `actionButton` will be hit by the user in the UI, this `hit_module` reactive object will be updated[^communication-to-module-1] with the integer returned by the input.
 
 [^communication-to-module-1]: As long as it is used somewhere in the code.
 
@@ -142,7 +142,7 @@ observe({
 
 ```
 
-When the app is launched, the main server's reactive is updated with the input (incremental number) of the `actionButton` and the module server action is triggered each time the user click the button in the ui:
+When the app is launched, the main server's reactive is updated with the input (incremental number) of the `actionButton` and the module server action is triggered each time the user click the button in the UI:
 
 > Listening on <http://127.0.0.1:5538>\
 > Module reactive parameter hit - trigger = 0\

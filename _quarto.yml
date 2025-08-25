@@ -6,7 +6,7 @@ book:
   author: "Philippe Peret"
   date: today
   sidebar: 
-    footer: "</br>[![](image/by-nc-sa.png){height=42px}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
+    footer: "</br>[![](image/by-nc-sa.png){height=42px, target=_blank}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
   chapters:
     - index.qmd
     - intro.qmd
@@ -36,8 +36,10 @@ book:
     right: 
       - icon: github
         href: https://github.com/thekangaroofactory
+        target: _blank
       - icon: linkedin 
         href: https://www.linkedin.com/in/philippeperet/
+        target: _blank
 
 bibliography: references.bib
 

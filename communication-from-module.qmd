@@ -4,7 +4,7 @@ bibliography: references.bib
 
 # Communication from a module (to its parent)
 
-The previous chapter already introduced how a module communicates with its parent. Indeed, as long as a module can't live by itself (there's no way to launch it outside of a Shiny app), the communication inside a Shiny module already involves communicating to the main app, its ui and server, *before* (in the sense of an action timeline) coming back to the scope of the module.
+The previous chapter already introduced how a module communicates with its parent. Indeed, as long as a module can't live by itself (there's no way to launch it outside of a Shiny app), the communication inside a Shiny module already involves communicating to the main app, its UI and server, *before* (in the sense of an action timeline) coming back to the scope of the module.
 
 But the goal was not analyze how a module communicates with it's parent so this chapter will specificaly focus on this topic and extend to how to pass data / information to its parent.
 
@@ -22,7 +22,7 @@ Also this chapter will still be a reference no matter who is the parent of the m
 
 ## Inputs
 
-Inputs are supposed to be values that are communicated (mostly by the main app ui) to the module through the namespace / scope mechanism.
+Inputs are supposed to be values that are communicated (mostly by the main app UI) to the module through the namespace / scope mechanism.
 
 But as we saw in the previous chapter, they are visible from the main app server so in a sense there is a kind of communication from the module to its parent through the namespace wrapping.
 
@@ -33,7 +33,7 @@ In conclusion, module input should **not** be used to communicate to the parent 
 
 ## Outputs
 
-Outputs are natural objects to communicate from inside a module to the outside in particular to its parent, but they are limited to a specific process of rendering reactive expressions to the output list and feed the app ui with reactive outputs to display text, tables, plots and... inputs.
+Outputs are natural objects to communicate from inside a module to the outside in particular to its parent, but they are limited to a specific process of rendering reactive expressions to the output list and feed the app UI with reactive outputs to display text, tables, plots and... inputs.
 
 In short, outputs are communicating to the parent object of the module, but only for rendering purpose and they can't be used to convey information or trigger tasks outside of the module.
 
@@ -63,7 +63,7 @@ But somehow I feel like this is something you can easily miss as you discover Sh
 The [module-return-value](https://github.com/thekangaroofactory/template-r-shiny-communication/tree/main/module-return-value) folder of the GitHub repository linked to this book implements a very simple example of a module that returns a value.
 :::
 
-The module ui function implements the same input as we saw before:
+The module UI function implements the same input as we saw before:
 
 ```{r}
 #| eval: false
@@ -102,14 +102,14 @@ rv <- module_server(id = "module")
 
 ```
 
-Listening to the `rv` object allows to print its content to the console (here the user just increments the numeric input value in the ui):
+Listening to the `rv` object allows to print its content to the console (here the user just increments the numeric input value in the UI):
 
 > Listening on http://127.0.0.1:5265\
 > Module return value = 0\
 > Module return value = 1\
 > Module return value = 2
 
-So basically when the user updates the numeric input value in the ui, it is passed to the module through the input object, triggers the reactive update that is accessible from the return value assigned in the main server.
+So basically when the user updates the numeric input value in the UI, it is passed to the module through the input object, triggers the reactive update that is accessible from the return value assigned in the main server.
 
 While it may sound complicated, this is what modular architecture means: independent tasks are performed inside independent components and access to the components information is done through dedicated connectors so that the dependency is only on the connector itself[^communication-from-module-3].
 
