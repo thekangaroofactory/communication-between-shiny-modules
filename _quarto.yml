@@ -46,7 +46,6 @@ bibliography: references.bib
 format:
   html:
     link-external-newwindow: true
-    link-external-filter: '^(?:http:|https:)\/\/'
     theme:
       - cosmo
       - brand
