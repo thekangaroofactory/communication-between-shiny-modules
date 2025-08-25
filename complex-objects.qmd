@@ -75,7 +75,7 @@ The [complex-values](https://github.com/thekangaroofactory/template-r-shiny-comm
 
 With this approach, you can build very powerful and flexible communication workflows between your modules.
 
-But keep in mind that more complexity implies that it is more difficult to understand and maintain the code of your application. When one takes a dependency on return value or provides reactive parameters to a module server function, it is critical that they understand the full impact it's going to cause on the behavior.\
+But keep in mind that more complexity implies that it is more difficult to understand and maintain the code of your application. When one takes a dependency on return value or provides reactive parameters to a module server function, it is critical that they understand the full impact it is going to cause on the behavior.\
 For this reason, module server functions should always be documented (Roxygen is amazing for that), with all the parameter and value fields well described. Another best practice is to test server function parameters to make sure they fit with the expected shape & reactivity.
 
 ::: callout-note

@@ -2,11 +2,11 @@
 
 This is I believe a topic that is not so well documented[^communication-between-modules-1], but not so different from previous chapters.
 
-[^communication-between-modules-1]: There is a good introduction article in the Shiny documentation [@positShinyCommunication], but it relies on the `callModule` function while it's help page suggests to use `moduleServer`.
+[^communication-between-modules-1]: There is a good introduction article in the Shiny documentation [@positShinyCommunication], but it relies on the `callModule` function while it is help page suggests to use `moduleServer`.
 
 In my experience, every time you face a communication problem between your modules, the use case is out of the *'getting started with'* examples, which ends up in hours of online searches (assuming you're trying to understand the different options to make a wise choice - not asking a LLM).
 
-The purpose of this chapter is mostly to go through the two patterns that may be used in a complex app and demonstrate that it's not different from what we saw previously.
+The purpose of this chapter is mostly to go through the two patterns that may be used in a complex app and demonstrate that it is not different from what we saw previously.
 
 Remember the main server / module server communication is basically parent / child communication.\
 Same applies to communication between modules.
@@ -14,11 +14,11 @@ Same applies to communication between modules.
 ## Nested modules
 
 As mentioned earlier, there are specific use cases when a module would call another module.\
-The typical use case for this implementation is when you want to delegate some task from the module to a sub module because your module server itself is growing and requires some architecture. Another great example is when a specific task / feature is not always needed. Maybe something not all users will be allowed to use or require. In this case it's good practice to avoid the creation of reactives and observers if they will never be reached[^communication-between-modules-2].
+The typical use case for this implementation is when you want to delegate some task from the module to a sub module because your module server itself is growing and requires some architecture. Another great example is when a specific task / feature is not always needed. Maybe something not all users will be allowed to use or require. In this case it is good practice to avoid the creation of reactives and observers if they will never be reached[^communication-between-modules-2].
 
 [^communication-between-modules-2]: Input entries are created only when their UI is implemented.
 
-Maybe the term *nested* is not the best because it creates some confusion over the simple main server / module server pattern. It somehow feels like it's going to be different and many (including myself) starts their journey into the module world with a biased interpretation in mind.
+Maybe the term *nested* is not the best because it creates some confusion over the simple main server / module server pattern. It somehow feels like it is going to be different and many (including myself) starts their journey into the module world with a biased interpretation in mind.
 
 Well basically a *nested* module is in fact a **child** of a parent module, so that it is the same as having the main server as parent and a module as a child!
 
@@ -109,7 +109,7 @@ The resulting UI architecture looks like this:
 You may ask yourself why I put the modules UI functions inside dotted boxes.\
 Well, they are not *really* executed like that nor at different levels since they are only called from the main app UI as a chain[^communication-between-modules-4]! Only the namespace assignment makes their input visible to a certain module / level in the architecture. This ensures that a given module can be used at any level of the hierarchy (we could imagine of a module being used in different branch at different levels for example).
 
-[^communication-between-modules-4]: So it's more main app UI \> module UI \> sub module UI
+[^communication-between-modules-4]: So it is more main app UI \> module UI \> sub module UI
 
 All of the three servers have a listener that prints the `names` of the input list:
 
@@ -123,7 +123,7 @@ All of the three servers have a listener that prints the `names` of the input li
 See how everything is really a matter of context / scope and parent-child relationship!\
 Basically, if you say zoom on the module and sub module levels, you get exactly the same result as the one we saw in the module communication chapters.
 
-When building an architecture for your apps, it's key to keep in mind how the information flow goes through the different layers (and between the UI / server sides):
+When building an architecture for your apps, it is key to keep in mind how the information flow goes through the different layers (and between the UI / server sides):
 
 ![Nested module input communication process](image/nested-module-input-communication.png)
 
@@ -284,7 +284,7 @@ The important takeaway here is that the key to launch specific tasks inside a mo
 
 ### Return value(s)
 
-Just as we can pass parameters from server function to server function, it's possible to pass their return value(s) from one level to another.
+Just as we can pass parameters from server function to server function, it is possible to pass their return value(s) from one level to another.
 
 Remember that module server functions are like any other function in the sense that they return a value to the caller and all you need to do is assign this return value at the upper level.
 
@@ -354,16 +354,16 @@ The communication schema is quite simple here:
 
 ### Conclusion
 
-As you can see, everything works the same as with a single module as long as you consider only parent-child relationships. That is something critical to include from the very beginning of your architecture thinking as you don't want to pass unnecessary data from a module to another one just to feed the next level. In this case it's better to have the second module at the same level as the first one and this is what we are going to explore next.
+As you can see, everything works the same as with a single module as long as you consider only parent-child relationships. That is something critical to include from the very beginning of your architecture thinking as you don't want to pass unnecessary data from a module to another one just to feed the next level. In this case it is better to have the second module at the same level as the first one and this is what we are going to explore next.
 
 ## Siblings modules
 
-When your modules are handling separate tasks or features that do not directly involve the other modules, it's better to keep them at the same level to reduce the information workflow and keep the architecture easier to understand.
+When your modules are handling separate tasks or features that do not directly involve the other modules, it is better to keep them at the same level to reduce the information workflow and keep the architecture easier to understand.
 
 We sometimes talk about siblings module in the sense that they belong to the same level of hierarchy in the application architecture, but this introduces a misunderstanding that siblings *usually* know each others while this is not true for modules!
 
 In fact, *siblings* modules don't even exist.\
-Everything is a matter of parent-child relationship **assuming** that in case there are other children, they don't know each others. One box (scope) in the hierarchy just knows about it's direct parent (who called it's server function) and about it's direct children (what server functions it calls).
+Everything is a matter of parent-child relationship **assuming** that in case there are other children, they don't know each others. One box (scope) in the hierarchy just knows about it is direct parent (who called it is server function) and about it is direct children (what server functions it calls).
 
 Everything else is a blackbox that it **should** know nothing about.
 
@@ -394,7 +394,7 @@ Basically, everything here works just like for when we had only one module (see 
 Each module just knows about its own scope, so there is no way to directly communicate an input from a module to another one, which is great since as we saw, an input is meant to communicate from the UI to the specific module server. So if you need to pass an input to module 1 or module 2, then this input should be in priority defined in the corresponding module.
 
 That being said, in specific cases, you could need to pass an input *value* from one module to another.\
-But then it's just like a return value + function parameter 'combo' that we will see in a later section (see <!--# xref -->).
+But then it is just like a return value + function parameter 'combo' that we will see in a later section (see <!--# xref -->).
 
 ### Outputs
 
@@ -413,7 +413,7 @@ The following is printed to the console when you launch the app:
 > Outputs seen from the module2 server: module1-text_1 / module2-text_2 \
 > Outputs seen from the main server: module1-text_1 / module2-text_2
 
-While this may look confusing since it looks like module2 can see both modules outputs but module1 only sees it's own output, a quick look at the main server provides the answer:
+While this may look confusing since it looks like module2 can see both modules outputs but module1 only sees it is own output, a quick look at the main server provides the answer:
 
 ```{r}
 #| eval: false

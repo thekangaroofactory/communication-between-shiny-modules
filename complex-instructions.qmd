@@ -102,7 +102,7 @@ observeEvent(input$increment, {
 
 As long as you somehow decode the input value to determine which element is targeted by the action, one could imagine that this single access point could actually manage not only several elements, but also several actions.
 
-Well it's possible to tune the `inputId` of the button to say *encode* a message:
+Well it is possible to tune the `inputId` of the button to say *encode* a message:
 
 ```{r}
 #| eval: false
@@ -142,7 +142,7 @@ observeEvent(input$action, {
 
 ## Conclusion
 
-This is a very powerful approach when it comes to dealing with a big amount of dynamically generated inputs. Of course here, and for demonstration purpose, the inputs where explicitly created on UI side. But it's very easy to generate those input components from server side. All you need to do is make sure they have a unique `inputId` and here the `paste` function is your friend (basically use paste to concatenate the action type with the element id to get a single input value).
+This is a very powerful approach when it comes to dealing with a big amount of dynamically generated inputs. Of course here, and for demonstration purpose, the inputs where explicitly created on UI side. But it is very easy to generate those input components from server side. All you need to do is make sure they have a unique `inputId` and here the `paste` function is your friend (basically use paste to concatenate the action type with the element id to get a single input value).
 
 Note that it is also possible to tune the `setInputValue` expression with `sprintf` based expressions and even replace `this.id` by an evaluated expression.
 

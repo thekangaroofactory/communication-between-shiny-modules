@@ -1,4 +1,4 @@
-# Communication to the module (from it's parent)
+# Communication to the module (from it is parent)
 
 As discussed before, Shiny modules are used inside wider apps and there are many reasons why you would like to send data, information, values to the module to perform some internal tasks.
 
@@ -70,10 +70,10 @@ module_server <- function(id, trigger, debug = FALSE){}
 ```
 
 -   `trigger` is the reactive parameter used to... trigger a task inside the module\
-    (here it's just going to print a message to the console)
+    (here it is just going to print a message to the console)
 
 -   `debug` is a static (*standard*) parameter used to set some option at module start-up\
-    (here it's just going to print the value along with above message to the console)
+    (here it is just going to print the value along with above message to the console)
 
 Static parameters are a nice way to implement some flexibility in the module when they are meant to be implemented in different context. A good example could be to set this `debug` parameter to the value of an environment variable with the `Sys.getenv()` function. Depending on the environment, the module would print more or less traces to the console.
 
@@ -81,7 +81,7 @@ But static parameters are... static! So they convey a single information that do
 That's why reactive parameters are definitely a game changer.
 
 ::: callout-important
-When we say reactive parameters, it's important to understand that we are talking about the *reference* of the reactive object, not its *value*!
+When we say reactive parameters, it is important to understand that we are talking about the *reference* of the reactive object, not its *value*!
 
 It means the reactive object should be passed **without** ()\
 The value itself will be accessed inside the module server.
@@ -112,7 +112,7 @@ module_server(id = "module", trigger = hit_module, debug = TRUE)
 Here `debug` is set to `true` to display additional traces.
 
 Notice that we used `trigger = hit_module` to pass the reference of the reactive object, not its value.\
-If you pass `hit_module()` to the parameter, then you transform it into a static parameter and it's value - *from inside the module* - will never change.
+If you pass `hit_module()` to the parameter, then you transform it into a static parameter and it is value - *from inside the module* - will never change.
 
 A good practice to avoid mistakes (and R to fail with an error about trying to access something that is not a function) is to implement a test at the beginning of the module server function:
 

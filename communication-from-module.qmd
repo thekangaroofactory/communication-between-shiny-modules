@@ -6,16 +6,16 @@ bibliography: references.bib
 
 The previous chapter already introduced how a module communicates with its parent. Indeed, as long as a module can't live by itself (there's no way to launch it outside of a Shiny app), the communication inside a Shiny module already involves communicating to the main app, its UI and server, *before* (in the sense of an action timeline) coming back to the scope of the module.
 
-But the goal was not analyze how a module communicates with it's parent so this chapter will specificaly focus on this topic and extend to how to pass data / information to its parent.
+But the goal was not analyze how a module communicates with it is parent so this chapter will specificaly focus on this topic and extend to how to pass data / information to its parent.
 
 You may ask yourself why I use *parent* instead of *main server* to describe this relationship.\
-While the standard or at least most common way to implement a module is to call it's function from the main app server, it's not rare that a module will itself call another module (this is called nested module).\
+While the standard or at least most common way to implement a module is to call it is function from the main app server, it is not rare that a module will itself call another module (this is called nested module).\
 One example is when you have a module that will perform a task that involves another task wrapped into a different module or a sub-task that is not always necessary.
 
 As an example, the {[kitems](https://github.com/thekangaroofactory/kitems)} module server has a nested module to manage all the admin tasks on the data model because it contains numerous inputs, outputs and reactives that are not necessary to run the item management and may be used only once to setup the data model. In this case, it will never be launched when a user starts the app as they are most likely not allowed to perform admin tasks.\
 With this approach, you can save some resources by not creating unnecessary entries in the global input & output objects.
 
-Back to the relationship between a module and its parent, it does not matter if it's called from the main app server or from another module server. In both cases, it's just a call to its server function within a specific context and the scope of the module will be a child of it's parent scope.
+Back to the relationship between a module and its parent, it does not matter if it is called from the main app server or from another module server. In both cases, it is just a call to its server function within a specific context and the scope of the module will be a child of it is parent scope.
 
 We will dive later into the more complex cases where nested modules are involved to avoid bringing extra complexity at this stage, but generalizing to a parent-child relationship now will help when things get deeper complexity.\
 Also this chapter will still be a reference no matter who is the parent of the module.
@@ -113,12 +113,12 @@ So basically when the user updates the numeric input value in the UI, it is pass
 
 While it may sound complicated, this is what modular architecture means: independent tasks are performed inside independent components and access to the components information is done through dedicated connectors so that the dependency is only on the connector itself[^communication-from-module-3].
 
-[^communication-from-module-3]: As long as it's nature is not modified. If you replace for example a logical by a string it will very likely break some tests later in the code.
+[^communication-from-module-3]: As long as it is nature is not modified. If you replace for example a logical by a string it will very likely break some tests later in the code.
 
 ::: callout-warning
 There is an critical point to understand here.
 
-The input value could literaly be accessed directly from the main server: remember it could see the module entry in its own input list and basically it's possible to access the value with `input$'module-numeric'` but this would definitely break the modular approach!
+The input value could literaly be accessed directly from the main server: remember it could see the module entry in its own input list and basically it is possible to access the value with `input$'module-numeric'` but this would definitely break the modular approach!
 :::
 
 At this point, you may ask yourself why the title of this section is return value*(s)* instead of return value.\
