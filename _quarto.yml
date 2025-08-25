@@ -6,10 +6,10 @@ book:
   author: "Philippe Peret"
   date: today
   sidebar: 
-    footer: "</br>[![](image/by-nc-sa.png){height=42px, target=_blank}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
+    footer: "</br>[![](image/by-nc-sa.png){height=42px}](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
   chapters:
     - index.qmd
-    - intro.qmd
+    - introduction.qmd
     - part: "Communication Foundations"
       chapters: 
       - communication-inside-module.qmd
@@ -45,6 +45,8 @@ bibliography: references.bib
 
 format:
   html:
+    link-external-newwindow: true
+    link-external-filter: '^(?:http:|https:)\/\/'
     theme:
       - cosmo
       - brand
