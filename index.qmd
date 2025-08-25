@@ -1,10 +1,10 @@
 # Preface {.unnumbered}
 
-While working on the {[@kitems]} package which aims at providing a framework to manage tabular data inside R Shiny applications and has its main component delivered as a Shiny module server, I had to think about several implementations for this module to be used in complex apps.
+While working on the {kitems} @kitems package which aims at providing a framework to manage tabular data inside R Shiny applications and has its main component delivered as a Shiny module server, I had to think about several implementations for this module to be used in complex apps.
 
 The standard and most simple one is to fully delegate the items management to the module server. In this case, all operations are performed within the module server context and the components (buttons, inputs, table) are used in the parent application server.
 
-But sometimes (actually quite often), you need more flexibility over the items or maybe you want to implement custom UI components and this will be based on a mixed implementation where both the {[@kitems]} module server and the parent app or module server(s) will interact with the data and with each other's.
+But sometimes (actually quite often), you need more flexibility over the items or maybe you want to implement custom UI components and this will be based on a mixed implementation where both the {kitems} module server and the parent app or module server(s) will interact with the data and with each other.
 
 In the recent months (since the beginning of 2025), this project entered a phase where I am creating apps & tools based on this still converging package to validate the core concepts through different use cases and implementations.
 
@@ -12,7 +12,7 @@ During this phase, one of the main challenges I faced is the communication betwe
 
 Some of these challenges could be solved by reading existing documentation, articles or Q&A's, but my overall feeling is that there is a lack of documentation out of the basic examples in this domain and I had to spend a lot of time exploring how this communication *actually* works.
 
-This guide is meant to not only be the foundation of {[@kitems]} module server communication, but also to extend beyond this framework and be used in any complex Shiny application.
+This guide is meant to not only be the foundation of {kitems} module server communication, but also to extend beyond this framework and be used in any complex Shiny application.
 
 I hope it will help you put all the pieces together, and help us all make smart choices.
 
