@@ -1,6 +1,6 @@
 # Preface {.unnumbered}
 
-While working on the {kitems} @kitems package which aims at providing a framework to manage tabular data inside R Shiny applications and has its main component delivered as a Shiny module server, I had to think about several implementations for this module to be used in complex apps.
+While working on the {[kitems](https://github.com/thekangaroofactory/kitems)} [-@kitems] package which aims at providing a framework to manage tabular data inside R Shiny applications and has its main component delivered as a Shiny module server, I had to think about several implementations for this module to be used in complex apps.
 
 The standard and most simple one is to fully delegate the items management to the module server. In this case, all operations are performed within the module server context and the components (buttons, inputs, table) are used in the parent application server.
 
